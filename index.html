@@ -5,61 +5,70 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Багшийн журнал</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%236b8f71'/%3E%3Cpath d='M20 44c0-14 10-24 26-26-2 16-12 26-26 26z' fill='%23f7f5f0'/%3E%3Cpath d='M20 44l16-16' stroke='%236b8f71' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Manrope:wght@600;700;800&display=swap">
 <style>
 :root{
-  --bg:#f7f5f0; --card:#fff; --ink:#2b2a28; --muted:#8a857c; --line:#e9e4da;
-  --sage:#6b8f71; --sage-l:#e6eee6; --coral:#d9826f; --coral-l:#f8e6e0;
-  --sand:#c9a96a; --sand-l:#f5eedf; --sky:#6f93b3; --sky-l:#e4edf5; --lav:#9a88b8; --lav-l:#eeeaf5;
-  --r:14px;
+  --bg:#E9F0F3; --card:#fff; --ink:#10303A; --muted:#5B7280; --line:#E1E9EE;
+  --teal:#0F4C5C; --teal-d:#0A3540; --teal-l:#D7ECEF;
+  --sage:#12A594; --sage-l:#DAF3EE; --coral:#D9624B; --coral-l:#FCE5DF;
+  --sand:#B8860B; --sand-l:#FFF3CC; --sky:#1C58B5; --sky-l:#E2EDFF; --lav:#5435B8; --lav-l:#ECE6FD;
+  --r:18px;
 }
 *{box-sizing:border-box}
-html,body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.45 -apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Roboto,sans-serif}
+html,body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.45 Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}
 button,input,select,textarea{font:inherit;color:inherit}
-header{display:flex;align-items:center;gap:14px;padding:14px 22px;border-bottom:1px solid var(--line);background:var(--bg);position:sticky;top:0;z-index:5}
-.logo{display:flex;align-items:center;gap:10px;font-weight:650;letter-spacing:.2px}
-.logo svg{width:30px;height:30px}
-.logo small{display:block;font-weight:400;color:var(--muted);font-size:12px}
-nav{display:flex;gap:4px;margin-left:12px;flex-wrap:wrap}
-nav button{border:0;background:transparent;padding:7px 12px;border-radius:999px;cursor:pointer;color:var(--muted)}
-nav button:hover{background:#efebe3;color:var(--ink)}
-nav button.on{background:var(--ink);color:#fff}
-.pick{margin-left:auto;display:flex;gap:8px;align-items:center}
-select,input[type=text],input[type=date],input[type=number],textarea{border:1px solid var(--line);background:#fff;border-radius:10px;padding:7px 10px;outline:none}
-select:focus,input:focus,textarea:focus{border-color:var(--sage);box-shadow:0 0 0 3px var(--sage-l)}
-main{padding:22px;max-width:1280px;margin:0 auto}
-h1{font-size:22px;margin:0 0 4px;font-weight:650}
-h2{font-size:16px;margin:0 0 12px;font-weight:650}
+.app{display:flex;gap:20px;padding:20px;min-height:100vh;align-items:flex-start}
+.side{position:sticky;top:20px;flex:none;width:104px;background:var(--teal);border-radius:26px;padding:18px 10px;display:flex;flex-direction:column;align-items:center;gap:6px;min-height:calc(100vh - 40px)}
+.side .logo{width:46px;height:46px;border-radius:15px;background:#fff;display:flex;align-items:center;justify-content:center;margin-bottom:14px}
+.side .logo svg{width:24px;height:24px}
+nav{display:flex;flex-direction:column;gap:4px;width:100%}
+nav button{border:0;background:transparent;padding:10px 4px;border-radius:15px;cursor:pointer;color:#CFE7EC;display:flex;flex-direction:column;align-items:center;gap:5px;font-size:12px;width:100%}
+nav button svg{width:22px;height:22px}
+nav button:hover{background:rgba(255,255,255,.1);color:#fff}
+nav button.on{background:#fff;color:var(--teal);font-weight:700}
+.wrap{flex:1;min-width:0;background:#F7FAFB;border:1px solid #fff;border-radius:28px;padding:24px 28px;min-height:calc(100vh - 40px)}
+header{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:22px}
+.htitle{font-family:Manrope,Inter,sans-serif;font-weight:800;font-size:15px}
+.htitle small{display:block;font-family:Inter,sans-serif;font-weight:400;color:var(--muted);font-size:12px}
+.pick{margin-left:auto;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+select,input[type=text],input[type=date],input[type=number],textarea{border:1px solid var(--line);background:#fff;border-radius:12px;padding:8px 11px;outline:none}
+select:focus,input:focus,textarea:focus{border-color:var(--teal);box-shadow:0 0 0 3px var(--teal-l)}
+main{max-width:1320px}
+@media(max-width:760px){.app{flex-direction:column;padding:10px;gap:10px}.side{position:static;width:100%;min-height:0;flex-direction:row;padding:8px;border-radius:20px;overflow-x:auto}.side .logo{display:none}nav{flex-direction:row}nav button{min-width:68px}.wrap{padding:16px;border-radius:20px}}
+h1{font-family:Manrope,Inter,sans-serif;font-size:30px;margin:0 0 4px;font-weight:800}
+h2{font-family:Manrope,Inter,sans-serif;font-size:18px;margin:0 0 12px;font-weight:800}
 .sub{color:var(--muted);margin:0 0 18px}
 .card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:18px;margin-bottom:16px}
 .grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fill,minmax(230px,1fr))}
 .cls{cursor:default;transition:transform .12s}
-.cls .nm{font-size:18px;font-weight:650}
-.tag{display:inline-block;font-size:11px;padding:2px 8px;border-radius:999px;background:var(--sage-l);color:#466a4c;margin-left:6px;vertical-align:middle;font-weight:500}
-.tag.el{background:var(--lav-l);color:#6c5a8c}
+.cls .nm{font-family:Manrope,Inter,sans-serif;font-size:19px;font-weight:800}
+.tag{display:inline-block;font-size:11px;padding:3px 9px;border-radius:999px;background:var(--sage-l);color:#0B6F60;margin-left:6px;vertical-align:middle;font-weight:500}
+.tag.el{background:var(--lav-l);color:#5435B8}
 .kv{display:flex;justify-content:space-between;color:var(--muted);font-size:13px;margin-top:6px}
 .kv b{color:var(--ink);font-weight:600}
 .row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-.btn{border:1px solid var(--line);background:#fff;padding:7px 13px;border-radius:10px;cursor:pointer;white-space:nowrap}
+.btn{border:1px solid var(--line);background:#fff;padding:8px 14px;border-radius:12px;cursor:pointer;white-space:nowrap}
 .btn:hover{border-color:#cfc8ba}
-.btn.pri{background:var(--sage);border-color:var(--sage);color:#fff}
-.btn.pri:hover{background:#5d7f63}
+.btn.pri{background:var(--teal);border-color:var(--teal);color:#fff}
+.btn.pri:hover{background:var(--teal-d)}
 .btn.ghost{border-color:transparent;background:transparent;color:var(--muted)}
-.btn.ghost:hover{color:var(--ink);background:#efebe3}
+.btn.ghost:hover{color:var(--ink);background:#EEF3F6}
 .btn.dan{color:#b5543f}
 .btn.sm{padding:4px 9px;font-size:12px;border-radius:8px}
 table{border-collapse:separate;border-spacing:0;width:100%}
 th,td{padding:7px 9px;border-bottom:1px solid var(--line);text-align:left;white-space:nowrap}
-th{font-size:12px;color:var(--muted);font-weight:500;background:#fbfaf7;position:sticky;top:0}
+th{font-size:12px;color:var(--muted);font-weight:500;background:#F4F8FA;position:sticky;top:0}
 td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
 td.c,th.c{text-align:center}
-.tw{overflow:auto;max-height:68vh;border:1px solid var(--line);border-radius:12px;background:#fff}
+.tw{overflow:auto;max-height:68vh;border:1px solid var(--line);border-radius:16px;background:#fff}
 .tw table th:first-child,.tw table td:first-child{position:sticky;left:0;background:inherit;z-index:1}
 .tw tr{background:#fff}
-.tw thead tr{background:#fbfaf7}
+.tw thead tr{background:#F4F8FA}
 .tw thead th{z-index:2}
 .tw thead th:first-child{z-index:3}
 .subcl{color:var(--muted);font-size:12px;margin-left:4px}
-input.sc{width:54px;text-align:center;padding:5px 4px;border-radius:8px;border:1px solid transparent;background:#faf8f4}
+input.sc{width:54px;text-align:center;padding:5px 4px;border-radius:8px;border:1px solid transparent;background:#F2F6F8}
 input.sc:hover{border-color:var(--line)}
 input.sc.bad{border-color:var(--coral);background:var(--coral-l)}
 .ah{cursor:pointer;line-height:1.2}
@@ -81,8 +90,8 @@ input.sc.bad{border-color:var(--coral);background:var(--coral-l)}
 .mk.p{color:#c9c3b6}
 .legend{display:flex;gap:14px;flex-wrap:wrap;color:var(--muted);font-size:12px;margin-top:10px}
 .stats{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;margin-bottom:16px}
-.stat{background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px 14px}
-.stat .v{font-size:24px;font-weight:650;font-variant-numeric:tabular-nums}
+.stat{background:#fff;border:1px solid var(--line);border-radius:16px;padding:14px 16px}
+.stat .v{font-family:Manrope,Inter,sans-serif;font-size:26px;font-weight:800;font-variant-numeric:tabular-nums}
 .stat .l{color:var(--muted);font-size:12px}
 .bars{display:flex;align-items:flex-end;gap:10px;height:110px;padding-top:8px}
 .bar{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;gap:4px;font-size:12px;color:var(--muted)}
@@ -102,7 +111,31 @@ input.sc.bad{border-color:var(--coral);background:var(--coral-l)}
 .toast.on{opacity:1}
 .hint{color:var(--muted);font-size:12px}
 .two{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-@media(max-width:860px){.two{grid-template-columns:1fr}.pick{margin-left:0}header{flex-wrap:wrap}}
+@media(max-width:860px){.two{grid-template-columns:1fr}.pick{margin-left:0}}
+/* Хуваарь */
+.wk{display:grid;grid-template-columns:repeat(5,minmax(190px,1fr));gap:14px;min-width:1000px}
+.wkx{overflow-x:auto;padding-bottom:4px}
+.day{display:flex;flex-direction:column;gap:12px;min-width:0}
+.dh{background:var(--teal);color:#fff;border-radius:16px;padding:13px 15px}
+.dh b{font-family:Manrope,Inter,sans-serif;font-size:17px;font-weight:800}
+.dh span{float:right;font-size:12px;color:#BFE3EA;margin-top:3px}
+.dh small{display:block;font-size:11px;color:#9FCAD4;margin-top:3px}
+.day.today .dh{background:var(--sage)}
+.day.today .dh span,.day.today .dh small{color:#E6FAF6}
+.les{background:#fff;border:1px solid var(--line);border-radius:16px;padding:14px;display:flex;flex-direction:column;gap:11px;cursor:pointer;text-align:left;width:100%;transition:border-color .12s,transform .12s}
+.les:hover{border-color:#B9CFD7;transform:translateY(-1px)}
+.les .tm{display:flex;justify-content:space-between;align-items:center;font-weight:700;font-size:15px;font-variant-numeric:tabular-nums}
+.les .tm i{font-style:normal;font-size:11px;font-weight:600;color:#4A6470;background:#EEF3F6;border-radius:999px;padding:3px 9px}
+.les .who{display:flex;align-items:center;gap:10px}
+.les .who > span{flex:none;width:40px;height:40px;border-radius:12px;font-size:13px;font-weight:800;display:flex;align-items:center;justify-content:center}
+.les .who b{display:block;font-size:15px}
+.les .who small{display:block;font-size:12px;color:var(--muted);margin-top:1px}
+.les .ft{border-top:1px solid #EEF3F6;padding-top:9px;font-size:12px;color:#4A6470;display:flex;justify-content:space-between}
+.les.now{border-color:var(--sage);box-shadow:0 0 0 3px var(--sage-l)}
+.bell div{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #EEF3F6;font-size:13px}
+.bell div:last-child{border-bottom:0}
+.bell b{font-variant-numeric:tabular-nums}
+.todayrow{display:grid;gap:12px;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));margin-bottom:18px}
 /* Student card */
 .scard{border:1px solid var(--line);border-radius:16px;padding:20px 22px;background:#fff;page-break-inside:avoid;break-inside:avoid;margin-bottom:16px}
 .scard .hd{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;border-bottom:1px solid var(--line);padding-bottom:10px;margin-bottom:12px}
@@ -115,7 +148,7 @@ input.sc.bad{border-color:var(--coral);background:var(--coral-l)}
 .path span.done{background:var(--sage-l);color:#3f6a47}
 .cmt{border-top:1px dashed var(--line);margin-top:10px;padding-top:8px;min-height:40px;white-space:pre-wrap}
 /* Projector */
-#proj{position:fixed;inset:0;background:var(--bg);z-index:80;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px}
+#proj{position:fixed;inset:0;background:#F7FAFB;z-index:80;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px}
 #proj .t{font-size:clamp(22px,3vw,40px);font-weight:650;margin-bottom:6px}
 #proj .s{color:var(--muted);font-size:clamp(14px,1.6vw,22px);margin-bottom:30px}
 #proj .plants{display:flex;gap:clamp(12px,3vw,48px);align-items:flex-end;height:50vh;width:min(1100px,100%)}
@@ -134,7 +167,8 @@ input.sc.bad{border-color:var(--coral);background:var(--coral-l)}
   .scard{border-color:#ccc}
   @page{margin:14mm}
   .noprint{display:none !important}
-  body.printing-sum header,body.printing-sum nav,body.printing-sum .noprint{display:none !important}
+  body.printing-sum header,body.printing-sum .side,body.printing-sum .noprint{display:none !important}
+  body.printing-sum .app{display:block;padding:0}body.printing-sum .wrap{border:0;padding:0;background:#fff}
   body.printing-sum main{padding:0;max-width:none}
   body.printing-sum .tw{max-height:none;overflow:visible;border:0}
   body.printing-sum th{position:static}
@@ -142,18 +176,22 @@ input.sc.bad{border-color:var(--coral);background:var(--coral-l)}
 </style>
 </head>
 <body>
+<div class="app">
+<aside class="side">
+  <div class="logo"><svg viewBox="0 0 24 24" fill="none" stroke="#0F4C5C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 4C10 4 5 9 5 16c0 1.4.3 2.7.8 4M5.8 20C8 14 12 10 17 8"/></svg></div>
+  <nav id="nav" aria-label="Үндсэн цэс"></nav>
+</aside>
+<div class="wrap">
 <header>
-  <div class="logo">
-    <svg viewBox="0 0 64 64"><rect width="64" height="64" rx="16" fill="#6b8f71"/><path d="M20 44c0-14 10-24 26-26-2 16-12 26-26 26z" fill="#f7f5f0"/><path d="M20 44l16-16" stroke="#6b8f71" stroke-width="3" stroke-linecap="round"/></svg>
-    <div>Багшийн журнал<small id="hdrSub"></small></div>
-  </div>
-  <nav id="nav"></nav>
+  <div class="htitle">Багшийн журнал<small id="hdrSub"></small></div>
   <div class="pick">
     <select id="selClass" title="Анги"></select>
     <select id="selTerm" title="Улирал"></select>
   </div>
 </header>
 <main id="main"></main>
+</div>
+</div>
 <div id="printArea"></div>
 <div class="toast" id="toast"></div>
 
@@ -262,16 +300,93 @@ function sortedStudents(c){
 }
 
 /* ================== Shell ================== */
-const VIEWS = [['home','Нүүр'],['att','Ирц'],['grades','Дүн'],['sum','Нэгтгэл'],['students','Сурагчид'],['settings','Тохиргоо']];
+const VIEWS = [['home','Нүүр'],['sched','Хуваарь'],['att','Ирц'],['grades','Дүн'],['sum','Нэгтгэл'],['students','Сурагчид'],['settings','Тохиргоо']];
+const ICON = {
+  home:'<path d="M4 11l8-6 8 6v8a1 1 0 0 1-1 1h-4v-6H9v6H5a1 1 0 0 1-1-1z"/>',
+  sched:'<rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16M9 3v4M15 3v4"/>',
+  att:'<path d="M5 12l4 4 10-10"/>',
+  grades:'<path d="M5 20V10M12 20V4M19 20v-7"/>',
+  sum:'<rect x="4" y="4" width="7" height="7" rx="1.5"/><rect x="13" y="4" width="7" height="7" rx="1.5"/><rect x="4" y="13" width="7" height="7" rx="1.5"/><rect x="13" y="13" width="7" height="7" rx="1.5"/>',
+  students:'<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.6 3.4-5.5 6.5-5.5s5.7 1.9 6.5 5.5"/><path d="M16 4.5a3.5 3.5 0 0 1 0 7M18.5 14.8c1.7.7 2.8 2.4 3 5.2"/>',
+  settings:'<circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1L7 17M17 7l2.1-2.1"/>'
+};
+const ico = k => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICON[k]||''}</svg>`;
+
+/* ================== Хичээлийн хуваарь ================== */
+// [гараг 1-5, эхлэх, дуусах, хэддүгээр цаг, ангийн нэр, тоот]
+const SCHED = [
+  [1,'11:55','13:25','5–6-р цаг','10 сонгон','212 тоот'],
+  [1,'14:15','15:50','','11 сонгон','201 тоот'],
+  [2,'09:40','11:15','3–4-р цаг','10 сонгон Мягмар','212 тоот'],
+  [3,'08:00','08:45','1-р цаг','11Г',''],
+  [3,'09:40','11:15','3–4-р цаг','10Е',''],
+  [3,'13:30','15:00','7–8-р цаг','10А',''],
+  [4,'09:40','11:15','3–4-р цаг','10Б',''],
+  [4,'11:55','13:25','5–6-р цаг','10 сонгон','212 тоот'],
+  [4,'13:30','15:00','7–8-р цаг','11 сонгон','201 тоот'],
+  [5,'09:40','11:15','3–4-р цаг','11В',''],
+  [5,'13:30','14:15','7-р цаг','11Г','']
+];
+const DAYS = ['Даваа','Мягмар','Лхагва','Пүрэв','Баасан'];
+const BELL = [['1-р цаг','08:00–08:45'],['2-р цаг','08:50–09:35'],['3-р цаг','09:40–10:25'],['4-р цаг','10:30–11:15'],['Их завсарлага','11:15–11:55'],['5–6-р цаг','11:55–13:25'],['7–8-р цаг','13:30–15:00'],['9-р цаг','15:05–15:50']];
+const PAL = [['#FCE7EF','#A61E52'],['#ECE6FD','#5435B8'],['#FFEBD6','#9A4A08'],['#E2F4E0','#2A6E2E'],['#FFF3CC','#7A5600'],['#E2EDFF','#1C58B5'],['#DAF3EE','#0B6F60'],['#DBF1F8','#0A6480']];
+const CCOL = {'10 сонгон':0,'11 сонгон':1,'10 сонгон Мягмар':2,'11Г':3,'10Е':4,'10А':5,'10Б':6,'11В':7};
+const colOf = name => PAL[CCOL[name] ?? (Math.abs([...name].reduce((a,ch)=>a+ch.charCodeAt(0),0)) % PAL.length)];
+const shortName = n => /сонгон/.test(n) ? n.replace(/ сонгон.*/,'с') : n;
+const mins = t => { const [h,m] = t.split(':'); return +h*60 + +m; };
+function lesCard(l, now){
+  const [d,a,b,per,name,room] = l; const c = S.classes.find(x => x.name===name);
+  const [bg,fg] = colOf(name); const len = Math.round((mins(b)-mins(a))/45)*45;
+  const sub = [c ? c.kind : '', per, room].filter(Boolean).join(' · ');
+  return `<button class="les ${now?'now':''}" ${c?`onclick="openCls('${c.id}','grades')"`:''} title="Дүн рүү орох">
+    <div class="tm">${a}–${b}<i>${len} мин</i></div>
+    <div class="who"><span style="background:${bg};color:${fg}">${esc(shortName(name))}</span><div><b>${esc(name)}</b><small>${esc(sub)}</small></div></div>
+    <div class="ft"><span>${c ? c.students.length+' сурагч' : 'Журналд алга'}</span><span>${now?'Одоо явагдаж байна':''}</span></div>
+  </button>`;
+}
+function todayInfo(){ const d = new Date(); return {wd: d.getDay(), m: d.getHours()*60 + d.getMinutes()}; }
+function vSched(){
+  const T = todayInfo();
+  const base = new Date(); base.setHours(12,0,0,0); base.setDate(base.getDate() - ((base.getDay()+6)%7));
+  const cols = DAYS.map((dn,i) => {
+    const ls = SCHED.filter(l => l[0]===i+1).sort((x,y) => mins(x[1])-mins(y[1]));
+    const hrs = ls.reduce((s,l) => s + Math.round((mins(l[2])-mins(l[1]))/45), 0);
+    const dd = new Date(base); dd.setDate(base.getDate()+i);
+    const isToday = T.wd===i+1;
+    return `<div class="day ${isToday?'today':''}"><div class="dh"><b>${dn}</b><span>${hrs} цаг</span><small>${dd.getMonth()+1}.${String(dd.getDate()).padStart(2,'0')}${isToday?' · Өнөөдөр':''}</small></div>
+      ${ls.map(l => lesCard(l, isToday && T.m>=mins(l[1]) && T.m<mins(l[2]))).join('')}</div>`;
+  }).join('');
+  const total = SCHED.reduce((s,l) => s + Math.round((mins(l[2])-mins(l[1]))/45), 0);
+  const names = [...new Set(SCHED.map(l => l[4]))];
+  const studs = names.reduce((s,n) => s + (S.classes.find(c => c.name===n)?.students.length||0), 0);
+  return `<h1>Хичээл заах хуваарь</h1>
+    <p class="sub">${esc(S.settings.school)} · ${esc(S.settings.subject)} · Сүүлийн хичээл 12.18</p>
+    <div class="stats">
+      <div class="stat" style="background:var(--teal);border-color:var(--teal);color:#fff"><div class="l" style="color:#BFE3EA">7 хоногт</div><div class="v">${total} цаг</div><div class="l" style="color:#BFE3EA">${SCHED.length} хичээл · ${names.length} бүлэг</div></div>
+      <div class="stat"><div class="l">Нийт сурагч</div><div class="v">${studs}</div><div class="l">Хуваарьт орсон бүлгүүдэд</div></div>
+      <div class="stat"><div class="l">Хичээл бүрт</div><div class="row" style="margin-top:8px;gap:6px"><span class="tag" style="margin:0;background:#FCE7EF;color:#A61E52">Сорил 5</span><span class="tag" style="margin:0;background:#E2EDFF;color:#1C58B5">Идэвх 3</span><span class="tag" style="margin:0;background:#FFF3CC;color:#7A5600">Гэрийн даалгавар 2</span><span class="tag" style="margin:0">Дэвтэр 5 / 7 хоног</span></div></div>
+    </div>
+    <h2>Долоо хоногийн хуваарь</h2>
+    <div class="wkx"><div class="wk">${cols}</div></div>
+    <p class="hint">Хичээл дээр дарвал тухайн ангийн дүн рүү орно.</p>
+    <div class="card bell" style="max-width:420px;margin-top:18px"><h2 style="margin-bottom:4px">Хонхны хуваарь</h2>${BELL.map(([a,b]) => `<div><span style="color:var(--muted)">${a}</span><b>${b}</b></div>`).join('')}</div>`;
+}
+function todayStrip(){
+  const T = todayInfo();
+  const ls = SCHED.filter(l => l[0]===T.wd).sort((x,y) => mins(x[1])-mins(y[1]));
+  if(!ls.length) return `<div class="card" style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap"><span><b>Өнөөдөр хичээлгүй</b> <span class="hint">· амрах өдөр</span></span><button class="btn sm" onclick="go('sched')">Хуваарь харах</button></div>`;
+  return `<div class="row" style="justify-content:space-between;margin-bottom:10px"><h2 style="margin:0">Өнөөдрийн хичээл</h2><button class="btn sm ghost" onclick="go('sched')">Бүх хуваарь →</button></div>
+    <div class="todayrow">${ls.map(l => lesCard(l, T.m>=mins(l[1]) && T.m<mins(l[2]))).join('')}</div>`;
+}
 function render(){
   document.getElementById('hdrSub').textContent = `${S.settings.school} · ${S.settings.subject} · ${S.settings.year}`;
-  document.getElementById('nav').innerHTML = VIEWS.map(([k,l]) => `<button class="${S.ui.view===k?'on':''}" onclick="go('${k}')">${l}</button>`).join('');
+  document.getElementById('nav').innerHTML = VIEWS.map(([k,l]) => `<button class="${S.ui.view===k?'on':''}" onclick="go('${k}')">${ico(k)}${l}</button>`).join('');
   const sc = document.getElementById('selClass');
   sc.innerHTML = S.classes.map(c => `<option value="${c.id}" ${c.id===S.ui.classId?'selected':''}>${esc(c.name)}</option>`).join('');
   const st = document.getElementById('selTerm');
   st.innerHTML = Array.from({length:S.settings.terms},(_,i) => `<option value="${i+1}" ${i+1===S.ui.term?'selected':''}>${i+1}-р улирал</option>`).join('');
   const m = document.getElementById('main');
-  const V = {home:vHome, att:vAtt, grades:vGrades, sum:vSum, students:vStudents, settings:vSettings}[S.ui.view] || vHome;
+  const V = {home:vHome, sched:vSched, att:vAtt, grades:vGrades, sum:vSum, students:vStudents, settings:vSettings}[S.ui.view] || vHome;
   m.innerHTML = backupBanner() + V();
   if(S.ui.view==='grades') bindGrades();
 }
@@ -296,7 +411,7 @@ function vHome(){
     const avg = tots.length ? tots.reduce((a,b)=>a+b,0)/tots.length : null;
     const days = Object.keys(S.att[c.id]||{}).filter(d => S.att[c.id][d].term===t).sort();
     return `<div class="card cls">
-      <div class="nm">${esc(c.name)}<span class="tag ${c.kind==='Сонгон'?'el':''}">${esc(c.kind)}</span></div>
+      <div class="nm" style="display:flex;align-items:center;gap:10px"><span style="flex:none;width:40px;height:40px;border-radius:12px;background:${colOf(c.name)[0]};color:${colOf(c.name)[1]};font-size:13px;font-weight:800;display:flex;align-items:center;justify-content:center">${esc(shortName(c.name))}</span><span>${esc(c.name)}<span class="tag ${c.kind==='Сонгон'?'el':''}">${esc(c.kind)}</span></span></div>
       <div class="kv">Сурагч <b>${c.students.length}</b></div>
       <div class="kv">Энэ улирлын үнэлгээ <b>${as.length}</b></div>
       <div class="kv">Ангийн дундаж <b>${avg==null?'—':fmt(avg,1)+'% · '+letter(avg)}</b></div>
@@ -311,6 +426,8 @@ function vHome(){
   const wd = ['Ням','Даваа','Мягмар','Лхагва','Пүрэв','Баасан','Бямба'][d.getDay()];
   return `<h1>Сайн байна уу${S.settings.teacher? ', '+esc(S.settings.teacher.split(' ').at(-1)) : ''} 🌿</h1>
     <p class="sub">${d.getMonth()+1}-р сарын ${d.getDate()}, ${wd} гараг · ${S.ui.term}-р улирал</p>
+    ${todayStrip()}
+    <h2>Миний ангиуд</h2>
     <div class="grid">${cards}</div>
     <p class="hint">Анги нэмэх, устгах, нэр солих — <a href="#" onclick="go('settings');return false">Тохиргоо</a>. Сурагчдын нэрс оруулах — <a href="#" onclick="go('students');return false">Сурагчид</a>.</p>`;
 }
