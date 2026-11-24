@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="mn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Багшийн журнал</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%236b8f71'/%3E%3Cpath d='M20 44c0-14 10-24 26-26-2 16-12 26-26 26z' fill='%23f7f5f0'/%3E%3Cpath d='M20 44l16-16' stroke='%236b8f71' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E">
+<style>
+:root{
+  --bg:#f7f5f0; --card:#fff; --ink:#2b2a28; --muted:#8a857c; --line:#e9e4da;
+  --sage:#6b8f71; --sage-l:#e6eee6; --coral:#d9826f; --coral-l:#f8e6e0;
+  --sand:#c9a96a; --sand-l:#f5eedf; --sky:#6f93b3; --sky-l:#e4edf5; --lav:#9a88b8; --lav-l:#eeeaf5;
+  --r:14px;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.45 -apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Roboto,sans-serif}
+button,input,select,textarea{font:inherit;color:inherit}
+header{display:flex;align-items:center;gap:14px;padding:14px 22px;border-bottom:1px solid var(--line);background:var(--bg);position:sticky;top:0;z-index:5}
+.logo{display:flex;align-items:center;gap:10px;font-weight:650;letter-spacing:.2px}
+.logo svg{width:30px;height:30px}
+.logo small{display:block;font-weight:400;color:var(--muted);font-size:12px}
+nav{display:flex;gap:4px;margin-left:12px;flex-wrap:wrap}
+nav button{border:0;background:transparent;padding:7px 12px;border-radius:999px;cursor:pointer;color:var(--muted)}
+nav button:hover{background:#efebe3;color:var(--ink)}
+nav button.on{background:var(--ink);color:#fff}
+.pick{margin-left:auto;display:flex;gap:8px;align-items:center}
+select,input[type=text],input[type=date],input[type=number],textarea{border:1px solid var(--line);background:#fff;border-radius:10px;padding:7px 10px;outline:none}
+select:focus,input:focus,textarea:focus{border-color:var(--sage);box-shadow:0 0 0 3px var(--sage-l)}
+main{padding:22px;max-width:1280px;margin:0 auto}
+h1{font-size:22px;margin:0 0 4px;font-weight:650}
+h2{font-size:16px;margin:0 0 12px;font-weight:650}
+.sub{color:var(--muted);margin:0 0 18px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:18px;margin-bottom:16px}
+.grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fill,minmax(230px,1fr))}
+.cls{cursor:default;transition:transform .12s}
+.cls .nm{font-size:18px;font-weight:650}
+.tag{display:inline-block;font-size:11px;padding:2px 8px;border-radius:999px;background:var(--sage-l);color:#466a4c;margin-left:6px;vertical-align:middle;font-weight:500}
+.tag.el{background:var(--lav-l);color:#6c5a8c}
+.kv{display:flex;justify-content:space-between;color:var(--muted);font-size:13px;margin-top:6px}
+.kv b{color:var(--ink);font-weight:600}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.btn{border:1px solid var(--line);background:#fff;padding:7px 13px;border-radius:10px;cursor:pointer;white-space:nowrap}
+.btn:hover{border-color:#cfc8ba}
+.btn.pri{background:var(--sage);border-color:var(--sage);color:#fff}
+.btn.pri:hover{background:#5d7f63}
+.btn.ghost{border-color:transparent;background:transparent;color:var(--muted)}
+.btn.ghost:hover{color:var(--ink);background:#efebe3}
+.btn.dan{color:#b5543f}
+.btn.sm{padding:4px 9px;font-size:12px;border-radius:8px}
+table{border-collapse:separate;border-spacing:0;width:100%}
+th,td{padding:7px 9px;border-bottom:1px solid var(--line);text-align:left;white-space:nowrap}
+th{font-size:12px;color:var(--muted);font-weight:500;background:#fbfaf7;position:sticky;top:0}
+td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
+td.c,th.c{text-align:center}
+.tw{overflow:auto;max-height:68vh;border:1px solid var(--line);border-radius:12px;background:#fff}
+.tw table th:first-child,.tw table td:first-child{position:sticky;left:0;background:inherit;z-index:1}
+.tw tr{background:#fff}
+.tw thead tr{background:#fbfaf7}
+.tw thead th{z-index:2}
+.tw thead th:first-child{z-index:3}
+.subcl{color:var(--muted);font-size:12px;margin-left:4px}
+input.sc{width:54px;text-align:center;padding:5px 4px;border-radius:8px;border:1px solid transparent;background:#faf8f4}
+input.sc:hover{border-color:var(--line)}
+input.sc.bad{border-color:var(--coral);background:var(--coral-l)}
+.ah{cursor:pointer;line-height:1.2}
+.ah:hover{color:var(--ink)}
+.ah .t{display:block;color:var(--ink);font-weight:600;max-width:110px;overflow:hidden;text-overflow:ellipsis}
+.ah .m{font-size:11px}
+.pill{display:inline-block;min-width:26px;text-align:center;padding:2px 7px;border-radius:999px;font-weight:600;font-size:12px}
+.L-A{background:var(--sage-l);color:#3f6a47}.L-B{background:var(--sky-l);color:#3f6688}.L-C{background:var(--sand-l);color:#8a6a2a}.L-D{background:var(--lav-l);color:#6c5a8c}.L-F{background:var(--coral-l);color:#a24d39}.L-x{background:#f0ede7;color:var(--muted)}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#fff}
+.seg button{border:0;background:transparent;padding:6px 10px;cursor:pointer;color:var(--muted);border-right:1px solid var(--line);font-size:13px}
+.seg button:last-child{border-right:0}
+.seg button.on.p{background:var(--sage-l);color:#3f6a47;font-weight:600}
+.seg button.on.х{background:var(--sand-l);color:#8a6a2a;font-weight:600}
+.seg button.on.ч{background:var(--sky-l);color:#3f6688;font-weight:600}
+.seg button.on.ө{background:var(--lav-l);color:#6c5a8c;font-weight:600}
+.seg button.on.т{background:var(--coral-l);color:#a24d39;font-weight:600}
+.mk{display:inline-block;width:22px;height:22px;line-height:22px;border-radius:6px;font-size:12px;font-weight:600;text-align:center}
+.mk.х{background:var(--sand-l);color:#8a6a2a}.mk.ч{background:var(--sky-l);color:#3f6688}.mk.ө{background:var(--lav-l);color:#6c5a8c}.mk.т{background:var(--coral-l);color:#a24d39}
+.mk.p{color:#c9c3b6}
+.legend{display:flex;gap:14px;flex-wrap:wrap;color:var(--muted);font-size:12px;margin-top:10px}
+.stats{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;margin-bottom:16px}
+.stat{background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+.stat .v{font-size:24px;font-weight:650;font-variant-numeric:tabular-nums}
+.stat .l{color:var(--muted);font-size:12px}
+.bars{display:flex;align-items:flex-end;gap:10px;height:110px;padding-top:8px}
+.bar{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;gap:4px;font-size:12px;color:var(--muted)}
+.bar i{display:block;width:100%;border-radius:8px 8px 4px 4px;min-height:3px}
+.bar b{color:var(--ink);font-weight:600}
+.lvl{font-size:12px;color:var(--muted)}
+.lvl b{font-weight:600;color:var(--ink)}
+.up{color:#3f6a47}.down{color:#a24d39}
+.banner{background:var(--sand-l);border:1px solid #ecdcb9;color:#7a5c22;border-radius:12px;padding:10px 14px;margin-bottom:16px;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.empty{color:var(--muted);text-align:center;padding:30px 10px}
+.modal{position:fixed;inset:0;background:rgba(43,42,40,.35);display:flex;align-items:center;justify-content:center;z-index:50;padding:20px}
+.modal .box{background:#fff;border-radius:18px;padding:22px;width:min(520px,100%);max-height:90vh;overflow:auto;box-shadow:0 20px 60px rgba(0,0,0,.15)}
+.modal .box.wide{width:min(760px,100%)}
+.fld{display:flex;flex-direction:column;gap:4px;margin-bottom:12px}
+.fld label{font-size:12px;color:var(--muted)}
+.toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;padding:9px 16px;border-radius:999px;font-size:13px;z-index:60;opacity:0;transition:opacity .2s;pointer-events:none}
+.toast.on{opacity:1}
+.hint{color:var(--muted);font-size:12px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:860px){.two{grid-template-columns:1fr}.pick{margin-left:0}header{flex-wrap:wrap}}
+/* Student card */
+.scard{border:1px solid var(--line);border-radius:16px;padding:20px 22px;background:#fff;page-break-inside:avoid;break-inside:avoid;margin-bottom:16px}
+.scard .hd{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;border-bottom:1px solid var(--line);padding-bottom:10px;margin-bottom:12px}
+.scard .who{font-size:18px;font-weight:650}
+.scard .big{font-size:30px;font-weight:700;text-align:right;line-height:1}
+.scard table td,.scard table th{padding:5px 6px}
+.path{display:flex;gap:4px;margin:12px 0 6px}
+.path span{flex:1;text-align:center;font-size:11px;padding:6px 2px;border-radius:8px;background:#f3f0ea;color:var(--muted)}
+.path span.on{background:var(--sage);color:#fff;font-weight:600}
+.path span.done{background:var(--sage-l);color:#3f6a47}
+.cmt{border-top:1px dashed var(--line);margin-top:10px;padding-top:8px;min-height:40px;white-space:pre-wrap}
+/* Projector */
+#proj{position:fixed;inset:0;background:var(--bg);z-index:80;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px}
+#proj .t{font-size:clamp(22px,3vw,40px);font-weight:650;margin-bottom:6px}
+#proj .s{color:var(--muted);font-size:clamp(14px,1.6vw,22px);margin-bottom:30px}
+#proj .plants{display:flex;gap:clamp(12px,3vw,48px);align-items:flex-end;height:50vh;width:min(1100px,100%)}
+#proj .pl{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%}
+#proj .pl .c{font-size:clamp(22px,3vw,44px);font-weight:700}
+#proj .pl .stem{width:60%;border-radius:22px 22px 8px 8px;background:var(--sage);opacity:.85;min-height:8px;transition:height .8s}
+#proj .pl .n{margin-top:10px;font-size:clamp(13px,1.5vw,20px);text-align:center}
+#proj .avg{margin-top:36px;font-size:clamp(16px,2vw,26px);color:var(--muted)}
+#proj .avg b{color:var(--ink)}
+#proj .x{position:absolute;top:16px;right:20px}
+#printArea{display:none}
+@media print{
+  body.printing > *:not(#printArea){display:none !important}
+  body.printing #printArea{display:block}
+  body{background:#fff}
+  .scard{border-color:#ccc}
+  @page{margin:14mm}
+  .noprint{display:none !important}
+  body.printing-sum header,body.printing-sum nav,body.printing-sum .noprint{display:none !important}
+  body.printing-sum main{padding:0;max-width:none}
+  body.printing-sum .tw{max-height:none;overflow:visible;border:0}
+  body.printing-sum th{position:static}
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">
+    <svg viewBox="0 0 64 64"><rect width="64" height="64" rx="16" fill="#6b8f71"/><path d="M20 44c0-14 10-24 26-26-2 16-12 26-26 26z" fill="#f7f5f0"/><path d="M20 44l16-16" stroke="#6b8f71" stroke-width="3" stroke-linecap="round"/></svg>
+    <div>Багшийн журнал<small id="hdrSub"></small></div>
+  </div>
+  <nav id="nav"></nav>
+  <div class="pick">
+    <select id="selClass" title="Анги"></select>
+    <select id="selTerm" title="Улирал"></select>
+  </div>
+</header>
+<main id="main"></main>
+<div id="printArea"></div>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ================== Өгөгдөл ================== */
+const KEY = 'bagsh-journal-v1';
+const LEVELS = ['Эс','Эд','Эрхтэн','Эрхтэн тогтолцоо','Организм'];
+const ATT = [
+  {k:'',  l:'Ирсэн',   c:'p'},
+  {k:'х', l:'Хоцорсон',c:'х'},
+  {k:'ч', l:'Чөлөөтэй',c:'ч'},
+  {k:'ө', l:'Өвчтэй',  c:'ө'},
+  {k:'т', l:'Тасалсан',c:'т'}
+];
+let S;
+const uid = () => Math.random().toString(36).slice(2,8) + Date.now().toString(36).slice(-4);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const today = () => { const d = new Date(); d.setMinutes(d.getMinutes()-d.getTimezoneOffset()); return d.toISOString().slice(0,10); };
+const fmt = (v, d=0) => v==null || isNaN(v) ? '—' : (Math.round(v*10**d)/10**d).toString();
+const mnSort = (a,b) => a.localeCompare(b,'mn');
+
+function seed(){
+  const mk = (name, kind, grade, list) => ({id:uid(), name, kind, grade, students:(list||[]).map(([n,sub]) => ({id:uid(), name:n, sub:sub||''}))});
+  const g = (sub, names) => names.map(n => [n, sub]);
+  const e10 = [
+    ...g('10а',['Б. Мөнхбат','Содномиш']),
+    ...g('10б',['Төгөлдөр','Д. Саруул','Н. Дөлгөөн','Эрдэнэ','Баттүшиг']),
+    ...g('10д',['М. Мишээл','Э. Хүслэн','Ангараг','Ихбаяр','Маралжин','Тэргэл','Ариунболд','М. Үжин','Г. Бүжин','Э. Сарангэрэл','А. Амарзаяа','Э. Хүслэн (2)','А. Анхмаа','Б. Энхжин','Б. Төгсбаяр','О. Уранзаяа','О. Наранхүү']),
+    ...g('10е',['Б. Нандин','Г. Бөртэ','Эмүжин','Б. Мөнхзул','И. Мөнхжаргал','Сар-Уул'])
+  ];
+  const e11 = [
+    ...g('11а',['Цэцэнбилэг (?)','Билэгжаргал','Цэлмэг','Пүрэвочир','Анар']),
+    ...g('11б',['Билэгт','Анужин','Сувд-Эрдэнэ','Санчир','Анар-Цэцэг']),
+    ...g('11в',['Батхишиг','Төгсочир','Мөнхтүшиг','Дөлгөөн','Санчир','Азжаргал','Сүлд-Эрдэнэ','Учрал','Б. Ганбат']),
+    ...g('11г',['Санчир','М. Сондор','Мөнххүслэн','А. Энхжин','Энхцэцэг','Ганцолмон','Хан-Эрдэнэ','Баяржаргал','Золзаяа','Мишээл'])
+  ];
+  const classes = [
+    mk('10 сонгон','Сонгон',10,e10),
+    mk('11 сонгон','Сонгон',11,e11),
+    mk('10А','Үндсэн',10), mk('10В','Үндсэн',10), mk('10Е','Үндсэн',10),
+    mk('11А','Үндсэн',11), mk('11Г','Үндсэн',11)
+  ];
+  return {
+    version:1,
+    settings:{
+      teacher:'Б. Амаржаргал', school:'НЕБ 157-р сургууль', subject:'Биологи', year:'2026–2027', terms:3,
+      cats:[
+        {id:'yv', name:'Явц, даалгавар', w:30},
+        {id:'lab',name:'Лаборатори, дадлага', w:20},
+        {id:'sor',name:'Сорил, шалгалт', w:40},
+        {id:'idv',name:'Идэвх, оролцоо', w:10}
+      ],
+      scale:[{l:'A',min:90},{l:'B',min:80},{l:'C',min:70},{l:'D',min:60},{l:'F',min:0}],
+      fun:true, lastBackup:0
+    },
+    classes, assessments:[], scores:{}, att:{}, comments:{},
+    ui:{view:'home', classId:classes[0].id, term:1, date:today(), sort:'name'}
+  };
+}
+function load(){
+  try{ const t = localStorage.getItem(KEY); if(t){ S = JSON.parse(t); fix(); return; } }catch(e){}
+  S = seed(); save();
+}
+function fix(){
+  S.ui = S.ui || {}; S.ui.view ||= 'home'; S.ui.term ||= 1; S.ui.date ||= today(); S.ui.sort ||= 'name';
+  if(!S.classes.find(c => c.id===S.ui.classId)) S.ui.classId = S.classes[0]?.id;
+  S.scores ||= {}; S.att ||= {}; S.comments ||= {}; S.assessments ||= [];
+}
+function save(){
+  try{ localStorage.setItem(KEY, JSON.stringify(S)); }
+  catch(e){ toast('Хадгалж чадсангүй — нөөц файлаа татаж аваарай'); }
+}
+
+/* ================== Тооцоо ================== */
+const cls = () => S.classes.find(c => c.id===S.ui.classId);
+const termAs = (c, t) => S.assessments.filter(a => a.classId===c.id && a.term===t).sort((a,b) => (a.date||'').localeCompare(b.date||'') || 0);
+const sc = (aid, sid) => { const v = (S.scores[aid]||{})[sid]; return v===undefined || v===null || v==='' ? null : +v; };
+function letter(p){ if(p==null) return '—'; for(const s of S.settings.scale) if(p >= s.min) return s.l; return S.settings.scale.at(-1).l; }
+function levelIdx(p){ if(p==null) return -1; return p>=90?4 : p>=80?3 : p>=70?2 : p>=60?1 : 0; }
+function calc(c, st, t){
+  const as = termAs(c, t); const per = {}; let tw=0, acc=0;
+  for(const cat of S.settings.cats){
+    let got=0, max=0;
+    for(const a of as) if(a.cat===cat.id){ const v = sc(a.id, st.id); if(v==null) continue; got += v; max += +a.max; }
+    per[cat.id] = max>0 ? got/max*100 : null;
+    if(max>0 && +cat.w>0){ tw += +cat.w; acc += per[cat.id]*cat.w; }
+  }
+  const total = tw>0 ? acc/tw : null;
+  // ахиц: сүүлийн 2 үнэлгээ
+  const done = as.filter(a => sc(a.id, st.id)!=null);
+  let trend = null;
+  if(done.length>=2){ const a1 = done.at(-2), a2 = done.at(-1); trend = sc(a2.id,st.id)/a2.max*100 - sc(a1.id,st.id)/a1.max*100; }
+  return {per, total, L:letter(total), lvl:levelIdx(total), trend, n:done.length};
+}
+function attOf(c, st, t){
+  const days = S.att[c.id]||{}; let n=0, т=0, ч=0, ө=0, х=0;
+  for(const d in days){ const r = days[d]; if(r.term!==t) continue; n++; const m = r.m[st.id]; if(m==='т')т++; else if(m==='ч')ч++; else if(m==='ө')ө++; else if(m==='х')х++; }
+  return {n, т, ч, ө, х, pct: n ? (n-т-ч-ө)/n*100 : null};
+}
+function sortedStudents(c){
+  const arr = [...c.students];
+  if(S.ui.sort==='name') arr.sort((a,b) => mnSort(a.name,b.name));
+  if(S.ui.sort==='sub') arr.sort((a,b) => mnSort(a.sub||'',b.sub||'') || mnSort(a.name,b.name));
+  if(S.ui.sort==='total') arr.sort((a,b) => (calc(c,b,S.ui.term).total??-1) - (calc(c,a,S.ui.term).total??-1));
+  return arr;
+}
+
+/* ================== Shell ================== */
+const VIEWS = [['home','Нүүр'],['att','Ирц'],['grades','Дүн'],['sum','Нэгтгэл'],['students','Сурагчид'],['settings','Тохиргоо']];
+function render(){
+  document.getElementById('hdrSub').textContent = `${S.settings.school} · ${S.settings.subject} · ${S.settings.year}`;
+  document.getElementById('nav').innerHTML = VIEWS.map(([k,l]) => `<button class="${S.ui.view===k?'on':''}" onclick="go('${k}')">${l}</button>`).join('');
+  const sc = document.getElementById('selClass');
+  sc.innerHTML = S.classes.map(c => `<option value="${c.id}" ${c.id===S.ui.classId?'selected':''}>${esc(c.name)}</option>`).join('');
+  const st = document.getElementById('selTerm');
+  st.innerHTML = Array.from({length:S.settings.terms},(_,i) => `<option value="${i+1}" ${i+1===S.ui.term?'selected':''}>${i+1}-р улирал</option>`).join('');
+  const m = document.getElementById('main');
+  const V = {home:vHome, att:vAtt, grades:vGrades, sum:vSum, students:vStudents, settings:vSettings}[S.ui.view] || vHome;
+  m.innerHTML = backupBanner() + V();
+  if(S.ui.view==='grades') bindGrades();
+}
+function go(v){ S.ui.view = v; save(); render(); window.scrollTo(0,0); }
+document.getElementById('selClass').onchange = e => { S.ui.classId = e.target.value; save(); render(); };
+document.getElementById('selTerm').onchange = e => { S.ui.term = +e.target.value; save(); render(); };
+function toast(t){ const el = document.getElementById('toast'); el.textContent = t; el.classList.add('on'); clearTimeout(toast.h); toast.h = setTimeout(() => el.classList.remove('on'), 2200); }
+function backupBanner(){
+  const hasData = S.assessments.length || Object.keys(S.att).length;
+  const days = (Date.now() - (S.settings.lastBackup||0)) / 864e5;
+  if(!hasData || days < 7) return '';
+  return `<div class="banner noprint">🌱 Нөөц хуулбар ${S.settings.lastBackup ? Math.floor(days)+' хоногийн өмнө' : 'хараахан'} хийгдсэн. Өгөгдөл зөвхөн энэ компьютерт хадгалагддаг тул долоо хоногт нэг удаа нөөцлөөрэй.
+    <button class="btn sm pri" onclick="exportJSON()">Нөөц татах</button></div>`;
+}
+
+/* ================== Нүүр ================== */
+function vHome(){
+  const t = S.ui.term;
+  const cards = S.classes.map(c => {
+    const as = termAs(c,t);
+    const tots = c.students.map(s => calc(c,s,t).total).filter(v => v!=null);
+    const avg = tots.length ? tots.reduce((a,b)=>a+b,0)/tots.length : null;
+    const days = Object.keys(S.att[c.id]||{}).filter(d => S.att[c.id][d].term===t).sort();
+    return `<div class="card cls">
+      <div class="nm">${esc(c.name)}<span class="tag ${c.kind==='Сонгон'?'el':''}">${esc(c.kind)}</span></div>
+      <div class="kv">Сурагч <b>${c.students.length}</b></div>
+      <div class="kv">Энэ улирлын үнэлгээ <b>${as.length}</b></div>
+      <div class="kv">Ангийн дундаж <b>${avg==null?'—':fmt(avg,1)+'% · '+letter(avg)}</b></div>
+      <div class="kv">Сүүлд ирц бүртгэсэн <b>${days.length ? days.at(-1).slice(5).replace('-','.') : '—'}</b></div>
+      <div class="row" style="margin-top:12px">
+        <button class="btn sm" onclick="openCls('${c.id}','att')">Ирц</button>
+        <button class="btn sm" onclick="openCls('${c.id}','grades')">Дүн</button>
+        <button class="btn sm" onclick="openCls('${c.id}','sum')">Нэгтгэл</button>
+      </div></div>`;
+  }).join('');
+  const d = new Date();
+  const wd = ['Ням','Даваа','Мягмар','Лхагва','Пүрэв','Баасан','Бямба'][d.getDay()];
+  return `<h1>Сайн байна уу${S.settings.teacher? ', '+esc(S.settings.teacher.split(' ').at(-1)) : ''} 🌿</h1>
+    <p class="sub">${d.getMonth()+1}-р сарын ${d.getDate()}, ${wd} гараг · ${S.ui.term}-р улирал</p>
+    <div class="grid">${cards}</div>
+    <p class="hint">Анги нэмэх, устгах, нэр солих — <a href="#" onclick="go('settings');return false">Тохиргоо</a>. Сурагчдын нэрс оруулах — <a href="#" onclick="go('students');return false">Сурагчид</a>.</p>`;
+}
+function openCls(id, v){ S.ui.classId = id; go(v); }
+
+/* ================== Ирц ================== */
+function vAtt(){
+  const c = cls(); if(!c) return noClass();
+  if(!c.students.length) return noStudents(c);
+  const d = S.ui.date; const day = (S.att[c.id]||{})[d];
+  const list = sortedStudents(c).map((s,i) => {
+    const m = day ? (day.m[s.id]||'') : null;
+    return `<tr><td class="n" style="color:var(--muted)">${i+1}</td><td>${esc(s.name)}${s.sub?`<span class="subcl">${esc(s.sub)}</span>`:''}</td>
+      <td><div class="seg">${ATT.map(a => `<button class="${m!==null && m===a.k ? 'on '+a.c : ''}" onclick="mark('${s.id}','${a.k}')">${a.l}</button>`).join('')}</div></td></tr>`;
+  }).join('');
+  const cnt = day ? ATT.map(a => `${a.l}: <b>${c.students.filter(s => (day.m[s.id]||'')===a.k).length}</b>`).join(' · ') : '';
+  // хураангуй хүснэгт
+  const days = Object.keys(S.att[c.id]||{}).filter(x => S.att[c.id][x].term===S.ui.term).sort();
+  const summary = days.length ? `<div class="tw" style="max-height:60vh"><table><thead><tr><th>Нэр</th>${days.map(x => `<th class="c" style="cursor:pointer" onclick="setDate('${x}')">${x.slice(5).replace('-','.')}</th>`).join('')}<th class="n">Ирц %</th><th class="n">Т</th><th class="n">Ч</th><th class="n">Ө</th><th class="n">Х</th></tr></thead><tbody>
+      ${sortedStudents(c).map(s => { const a = attOf(c,s,S.ui.term);
+        return `<tr><td>${esc(s.name)}</td>${days.map(x => { const m = S.att[c.id][x].m[s.id]||''; return `<td class="c"><span class="mk ${m||'p'}">${m? m.toUpperCase() : '·'}</span></td>`; }).join('')}
+        <td class="n"><b>${fmt(a.pct)}</b></td><td class="n">${a.т||''}</td><td class="n">${a.ч||''}</td><td class="n">${a.ө||''}</td><td class="n">${a.х||''}</td></tr>`; }).join('')}
+      </tbody></table></div>
+      <div class="legend"><span><span class="mk p">·</span> ирсэн</span><span><span class="mk х">Х</span> хоцорсон</span><span><span class="mk ч">Ч</span> чөлөөтэй</span><span><span class="mk ө">Ө</span> өвчтэй</span><span><span class="mk т">Т</span> тасалсан</span><span>Ирц % = (бүх цаг − Т − Ч − Ө) ÷ бүх цаг</span></div>`
+    : `<div class="empty">Энэ улиралд ирц бүртгэгдээгүй байна.</div>`;
+  return `<h1>Ирц · ${esc(c.name)}</h1><p class="sub">${S.ui.term}-р улирал · бүртгэсэн цаг: ${days.length}</p>
+    <div class="two">
+      <div class="card">
+        <div class="row" style="margin-bottom:12px">
+          <button class="btn sm ghost" onclick="shiftDate(-1)">‹</button>
+          <input type="date" value="${d}" onchange="setDate(this.value)">
+          <button class="btn sm ghost" onclick="shiftDate(1)">›</button>
+          <button class="btn sm" onclick="setDate(today())">Өнөөдөр</button>
+          <span style="flex:1"></span>
+          ${day ? `<button class="btn sm" onclick="allPresent()">Бүгд ирсэн</button><button class="btn sm ghost dan" onclick="delDay()">Устгах</button>`
+                : `<button class="btn sm pri" onclick="startDay()">Энэ өдрийн ирц бүртгэх</button>`}
+        </div>
+        ${day ? `<p class="hint" style="margin:0 0 8px">${cnt}${day.term!==S.ui.term?` · <b>${day.term}-р улиралд</b> бүртгэгдсэн`:''}</p>` : `<p class="hint">Товч дармагц бүгдийг «Ирсэн» гэж бүртгэнэ — дараа нь ирээгүй хүүхдийг л тэмдэглэнэ.</p>`}
+        <table>${list}</table>
+      </div>
+      <div class="card"><h2>Улирлын ирцийн хүснэгт</h2>${summary}</div>
+    </div>`;
+}
+function setDate(d){ S.ui.date = d; save(); render(); }
+function shiftDate(n){ const d = new Date(S.ui.date+'T12:00'); d.setDate(d.getDate()+n); setDate(d.toISOString().slice(0,10)); }
+function ensureDay(){ const c = cls(); S.att[c.id] ||= {}; S.att[c.id][S.ui.date] ||= {term:S.ui.term, m:{}}; return S.att[c.id][S.ui.date]; }
+function startDay(){ ensureDay(); save(); render(); }
+function mark(sid, k){ const day = ensureDay(); if(k) day.m[sid] = k; else delete day.m[sid]; save(); render(); }
+function allPresent(){ ensureDay().m = {}; save(); render(); }
+function delDay(){ if(!confirm('Энэ өдрийн ирцийг устгах уу?')) return; delete S.att[cls().id][S.ui.date]; save(); render(); }
+
+/* ================== Дүн ================== */
+function catName(id){ return (S.settings.cats.find(c => c.id===id)||{name:'?'}).name; }
+function vGrades(){
+  const c = cls(); if(!c) return noClass();
+  if(!c.students.length) return noStudents(c);
+  const t = S.ui.term, as = termAs(c,t);
+  const head = as.map(a => `<th class="c"><div class="ah" onclick="editA('${a.id}')" title="Засах"><span class="t">${esc(a.title)}</span><span class="m">${esc(catName(a.cat))} · ${a.max}</span><br><span class="m">${a.date? a.date.slice(5).replace('-','.') : ''}</span></div></th>`).join('');
+  const rows = sortedStudents(c).map(s => {
+    const r = calc(c,s,t);
+    return `<tr><td>${esc(s.name)}${s.sub?`<span class="subcl">${esc(s.sub)}</span>`:''}</td>
+      ${as.map(a => { const v = sc(a.id,s.id); return `<td class="c"><input class="sc ${v!=null && v>a.max?'bad':''}" data-a="${a.id}" data-s="${s.id}" value="${v==null?'':v}" inputmode="decimal"></td>`; }).join('')}
+      <td class="n" id="tot-${s.id}">${totCell(r)}</td></tr>`;
+  }).join('');
+  const avgRow = as.length ? `<tr><td style="color:var(--muted)">Дундаж</td>${as.map(a => { const v = c.students.map(s => sc(a.id,s.id)).filter(x => x!=null); return `<td class="c hint">${v.length? fmt(v.reduce((x,y)=>x+y,0)/v.length/a.max*100)+'%' : ''}</td>`; }).join('')}<td></td></tr>` : '';
+  return `<h1>Дүн · ${esc(c.name)}</h1><p class="sub">${t}-р улирал · ${as.length} үнэлгээ · оноогоо шууд бичээд Enter дарвал доошоо шилжинэ</p>
+    <div class="row" style="margin-bottom:14px">
+      <button class="btn pri" onclick="editA()">+ Үнэлгээ нэмэх</button>
+      ${sortSel()}
+    </div>
+    ${as.length ? `<div class="tw"><table><thead><tr><th>Сурагч</th>${head}<th class="n">Нийт</th></tr></thead><tbody>${rows}${avgRow}</tbody></table></div>
+      <p class="hint">Хоосон нүд тооцоонд орохгүй (тэг биш). Ирээгүй, өгөөгүй бол 0 гэж бичнэ. Баганын гарчиг дээр дарж засна.</p>`
+      : `<div class="card empty">Энэ улиралд үнэлгээ алга. «+ Үнэлгээ нэмэх» дарж сорил, лаборатори, даалгавар үүсгээрэй.</div>`}`;
+}
+function totCell(r){ return r.total==null ? '<span class="hint">—</span>' : `<b>${fmt(r.total,1)}</b> <span class="pill L-${r.L}">${r.L}</span>`; }
+function sortSel(){ return `<select onchange="S.ui.sort=this.value;save();render()">
+  <option value="name" ${S.ui.sort==='name'?'selected':''}>Нэрээр</option>
+  <option value="sub" ${S.ui.sort==='sub'?'selected':''}>Ангиар (сонгон)</option>
+  <option value="total" ${S.ui.sort==='total'?'selected':''}>Нийт оноогоор</option></select>`; }
+function bindGrades(){
+  document.querySelectorAll('input.sc').forEach(inp => {
+    inp.addEventListener('change', () => {
+      const a = S.assessments.find(x => x.id===inp.dataset.a);
+      let v = inp.value.trim().replace(',','.');
+      S.scores[a.id] ||= {};
+      if(v===''){ delete S.scores[a.id][inp.dataset.s]; }
+      else if(isNaN(+v) || +v<0){ toast('Тоо оруулна уу'); inp.value=''; delete S.scores[a.id][inp.dataset.s]; }
+      else { S.scores[a.id][inp.dataset.s] = +v; if(+v > a.max) toast(`Дээд оноо ${a.max} — шалгаарай`); }
+      inp.classList.toggle('bad', v!=='' && +v > a.max);
+      save();
+      const c = cls(), s = c.students.find(x => x.id===inp.dataset.s);
+      document.getElementById('tot-'+s.id).innerHTML = totCell(calc(c,s,S.ui.term));
+    });
+    inp.addEventListener('keydown', e => {
+      if(e.key==='Enter' || e.key==='ArrowDown' || e.key==='ArrowUp'){
+        e.preventDefault();
+        const col = [...document.querySelectorAll(`input.sc[data-a="${inp.dataset.a}"]`)];
+        const i = col.indexOf(inp) + (e.key==='ArrowUp' ? -1 : 1);
+        if(col[i]){ col[i].focus(); col[i].select(); } else inp.blur();
+      }
+    });
+    inp.addEventListener('focus', () => inp.select());
+  });
+}
+function editA(id){
+  const c = cls(); const a = id ? S.assessments.find(x => x.id===id) : {title:'', cat:S.settings.cats[0].id, max:10, date:today(), term:S.ui.term};
+  modal(`<h2>${id?'Үнэлгээ засах':'Шинэ үнэлгээ'}</h2>
+    <div class="fld"><label>Нэр</label><input type="text" id="fT" value="${esc(a.title)}" placeholder="ж: Эсийн бүтэц — сорил"></div>
+    <div class="two">
+      <div class="fld"><label>Төрөл</label><select id="fC">${S.settings.cats.map(k => `<option value="${k.id}" ${k.id===a.cat?'selected':''}>${esc(k.name)} (${k.w}%)</option>`).join('')}</select></div>
+      <div class="fld"><label>Дээд оноо</label><input type="number" id="fM" min="1" value="${a.max}"></div>
+      <div class="fld"><label>Огноо</label><input type="date" id="fD" value="${a.date||''}"></div>
+      <div class="fld"><label>Улирал</label><select id="fU">${Array.from({length:S.settings.terms},(_,i)=>`<option ${i+1===a.term?'selected':''}>${i+1}</option>`).join('')}</select></div>
+    </div>
+    <div class="row" style="justify-content:space-between;margin-top:6px">
+      <div>${id?`<button class="btn ghost dan" onclick="delA('${id}')">Устгах</button>`:''}</div>
+      <div class="row"><button class="btn ghost" onclick="closeModal()">Болих</button><button class="btn pri" onclick="saveA('${id||''}')">Хадгалах</button></div>
+    </div>`);
+  setTimeout(() => document.getElementById('fT').focus(), 30);
+}
+function saveA(id){
+  const title = document.getElementById('fT').value.trim() || 'Үнэлгээ';
+  const max = +document.getElementById('fM').value; if(!(max>0)){ toast('Дээд оноо 0-ээс их байх ёстой'); return; }
+  const o = {title, cat:document.getElementById('fC').value, max, date:document.getElementById('fD').value, term:+document.getElementById('fU').value};
+  if(id) Object.assign(S.assessments.find(x => x.id===id), o);
+  else S.assessments.push({id:uid(), classId:S.ui.classId, ...o});
+  save(); closeModal(); render();
+}
+function delA(id){ if(!confirm('Энэ үнэлгээ болон бүх оноог устгах уу?')) return; S.assessments = S.assessments.filter(x => x.id!==id); delete S.scores[id]; save(); closeModal(); render(); }
+
+/* ================== Нэгтгэл ================== */
+function classSummary(c, t){
+  const rows = sortedStudents(c).map(s => ({s, r:calc(c,s,t), a:attOf(c,s,t)}));
+  const g = rows.filter(x => x.r.total!=null);
+  const dist = {}; S.settings.scale.forEach(x => dist[x.l]=0); g.forEach(x => dist[x.r.L]++);
+  const L = S.settings.scale.map(x => x.l);
+  const pass = g.filter(x => x.r.L !== L.at(-1)).length;
+  const qual = g.filter(x => L.indexOf(x.r.L) <= 2).length;
+  const avg = g.length ? g.reduce((a,x)=>a+x.r.total,0)/g.length : null;
+  const lv = [0,0,0,0,0]; g.forEach(x => lv[x.r.lvl]++);
+  return {rows, g, dist, pass, qual, avg, lv};
+}
+function vSum(){
+  const c = cls(); if(!c) return noClass();
+  if(!c.students.length) return noStudents(c);
+  const t = S.ui.term, R = classSummary(c,t), cats = S.settings.cats;
+  const maxD = Math.max(1, ...Object.values(R.dist));
+  const col = {A:'var(--sage)',B:'var(--sky)',C:'var(--sand)',D:'var(--lav)',F:'var(--coral)'};
+  const table = `<div class="tw"><table><thead><tr><th>Сурагч</th>${cats.map(k => `<th class="n">${esc(k.name)}<br><span class="hint">${k.w}%</span></th>`).join('')}
+    <th class="n">Нийт %</th><th class="c">Дүн</th>${S.settings.fun?'<th>Био түвшин</th>':''}<th class="c">Ахиц</th><th class="n">Ирц %</th><th class="n">Тасалсан</th><th class="noprint"></th></tr></thead><tbody>
+    ${R.rows.map(({s,r,a}) => `<tr><td>${esc(s.name)}${s.sub?`<span class="subcl">${esc(s.sub)}</span>`:''}</td>
+      ${cats.map(k => `<td class="n">${fmt(r.per[k.id])}</td>`).join('')}
+      <td class="n"><b>${fmt(r.total,1)}</b></td><td class="c">${r.total==null?'—':`<span class="pill L-${r.L}">${r.L}</span>`}</td>
+      ${S.settings.fun?`<td class="lvl">${r.lvl<0?'—':`<b>${LEVELS[r.lvl]}</b>`}</td>`:''}
+      <td class="c">${r.trend==null?'<span class="hint">—</span>': r.trend>=3?`<span class="up">↑ ${fmt(r.trend)}</span>`: r.trend<=-3?`<span class="down">↓ ${fmt(-r.trend)}</span>`:'<span class="hint">→</span>'}</td>
+      <td class="n">${fmt(a.pct)}</td><td class="n">${a.т||''}</td>
+      <td class="noprint"><button class="btn sm ghost" onclick="cardOne('${s.id}')">Карт</button></td></tr>`).join('')}
+    </tbody></table></div>`;
+  return `<h1>Нэгтгэл · ${esc(c.name)}</h1><p class="sub">${t}-р улирал · ${S.settings.subject} · ${esc(S.settings.teacher)}</p>
+    <div class="row noprint" style="margin-bottom:14px">
+      ${sortSel()}
+      <button class="btn" onclick="exportCSV()">Excel рүү (CSV)</button>
+      <button class="btn" onclick="printSum()">Хэвлэх</button>
+      <button class="btn" onclick="cardAll()">Бүх картыг хэвлэх</button>
+      ${S.settings.fun?`<button class="btn pri" onclick="projector()">Ангид харуулах</button>`:''}
+    </div>
+    <div class="stats">
+      <div class="stat"><div class="v">${fmt(R.avg,1)}${R.avg==null?'':'%'}</div><div class="l">Ангийн дундаж</div></div>
+      <div class="stat"><div class="v">${R.g.length? fmt(R.pass/R.g.length*100)+'%':'—'}</div><div class="l">Амжилт (A–D)</div></div>
+      <div class="stat"><div class="v">${R.g.length? fmt(R.qual/R.g.length*100)+'%':'—'}</div><div class="l">Чанар (A–C)</div></div>
+      <div class="stat"><div class="v">${R.g.length}/${c.students.length}</div><div class="l">Дүн гарсан сурагч</div></div>
+      <div class="stat" style="grid-column:span 2"><div class="bars">${Object.entries(R.dist).map(([l,n]) => `<div class="bar"><b>${n}</b><i style="height:${n/maxD*70}%;background:${col[l]||'var(--muted)'}"></i>${l}</div>`).join('')}</div></div>
+    </div>
+    ${table}
+    <p class="hint">Нийт % = ангилал бүрийн хувийг жингээр нь дунджилсан (оноо орсон ангиллууд л тооцогдоно). Ахиц = сүүлийн 2 үнэлгээний хувийн зөрүү.</p>`;
+}
+function exportCSV(){
+  const c = cls(), t = S.ui.term, R = classSummary(c,t), cats = S.settings.cats;
+  const q = v => `"${String(v??'').replace(/"/g,'""')}"`;
+  const lines = [[ '№','Овог нэр','Анги', ...cats.map(k => `${k.name} (${k.w}%)`), 'Нийт %','Дүн','Ирц %','Тасалсан','Чөлөөтэй','Өвчтэй','Хоцорсон' ].map(q).join(',')];
+  R.rows.forEach(({s,r,a},i) => lines.push([i+1, s.name, s.sub||c.name, ...cats.map(k => r.per[k.id]==null?'':fmt(r.per[k.id],1)), r.total==null?'':fmt(r.total,1), r.total==null?'':r.L, a.pct==null?'':fmt(a.pct), a.т, a.ч, a.ө, a.х].map(q).join(',')));
+  download(`${c.name}_${t}-р улирал_нэгтгэл.csv`, '﻿'+lines.join('\r\n'), 'text/csv');
+}
+function printSum(){ document.body.classList.add('printing-sum'); window.print(); setTimeout(() => document.body.classList.remove('printing-sum'), 500); }
+
+/* ---------- Сурагчийн карт ---------- */
+function cardHTML(c, s, t){
+  const r = calc(c,s,t), a = attOf(c,s,t), as = termAs(c,t);
+  const cmt = S.comments[s.id+'|'+t]||'';
+  return `<div class="scard">
+    <div class="hd"><div><div class="who">${esc(s.name)}</div><div class="hint">${esc(s.sub||c.name)} · ${esc(S.settings.subject)} · ${t}-р улирал · ${esc(S.settings.year)}</div></div>
+      <div><div class="big">${r.total==null?'—':r.L}</div><div class="hint" style="text-align:right">${fmt(r.total,1)}${r.total==null?'':'%'}</div></div></div>
+    ${S.settings.fun && r.lvl>=0 ? `<div class="hint">Био түвшин</div><div class="path">${LEVELS.map((l,i) => `<span class="${i===r.lvl?'on':i<r.lvl?'done':''}">${l}</span>`).join('')}</div>` : ''}
+    <table><tbody>
+      ${S.settings.cats.map(k => `<tr><td>${esc(k.name)} <span class="hint">${k.w}%</span></td><td class="n">${fmt(r.per[k.id])}${r.per[k.id]==null?'':'%'}</td></tr>`).join('')}
+      <tr><td>Ирц</td><td class="n">${fmt(a.pct)}${a.pct==null?'':'%'} <span class="hint">(${a.n} цаг · тасалсан ${a.т})</span></td></tr>
+    </tbody></table>
+    ${as.length ? `<div class="hint" style="margin-top:10px">Үнэлгээ бүрээр</div><table><tbody>${as.map(x => { const v = sc(x.id,s.id); return `<tr><td>${esc(x.title)}</td><td class="n">${v==null?'—':v+' / '+x.max}</td></tr>`; }).join('')}</tbody></table>` : ''}
+    <div class="cmt">${cmt ? esc(cmt) : '<span class="hint">Багшийн зөвлөмж: </span>'}</div>
+    <div class="hint" style="margin-top:10px;text-align:right">Багш: ${esc(S.settings.teacher)} ____________</div>
+  </div>`;
+}
+function cardOne(sid){
+  const c = cls(), s = c.students.find(x => x.id===sid), t = S.ui.term;
+  modal(`${cardHTML(c,s,t)}
+    <div class="fld"><label>Багшийн зөвлөмж (картан дээр гарна)</label><textarea id="fCm" rows="3" placeholder="ж: Лабораторийн ажилдаа идэвхтэй. Генетикийн бодлогоо давтаарай.">${esc(S.comments[s.id+'|'+t]||'')}</textarea></div>
+    <div class="row" style="justify-content:flex-end"><button class="btn ghost" onclick="closeModal()">Хаах</button>
+      <button class="btn" onclick="saveCm('${sid}',true)">Хэвлэх</button><button class="btn pri" onclick="saveCm('${sid}')">Хадгалах</button></div>`, true);
+}
+function saveCm(sid, pr){
+  const t = S.ui.term, v = document.getElementById('fCm').value.trim();
+  if(v) S.comments[sid+'|'+t] = v; else delete S.comments[sid+'|'+t];
+  save(); closeModal(); render();
+  if(pr){ const c = cls(); printHTML(cardHTML(c, c.students.find(x => x.id===sid), t)); }
+}
+function cardAll(){ const c = cls(), t = S.ui.term; printHTML(sortedStudents(c).map(s => cardHTML(c,s,t)).join('')); }
+function printHTML(h){ const p = document.getElementById('printArea'); p.innerHTML = h; document.body.classList.add('printing'); window.print(); setTimeout(() => { document.body.classList.remove('printing'); p.innerHTML=''; }, 500); }
+
+/* ---------- Ангид харуулах (нэргүй) ---------- */
+function projector(){
+  const c = cls(), t = S.ui.term, R = classSummary(c,t);
+  const mx = Math.max(1, ...R.lv);
+  const el = document.createElement('div'); el.id = 'proj';
+  el.innerHTML = `<button class="btn x" onclick="closeProj()">Хаах (Esc)</button>
+    <div class="t">${esc(c.name)} — манай ангийн био замнал</div>
+    <div class="s">${t}-р улирал · хэн аль түвшинд байгааг биш, ангийн маань зураглалыг харуулж байна</div>
+    <div class="plants">${LEVELS.map((l,i) => `<div class="pl"><div class="c">${R.lv[i]}</div><div class="stem" style="height:0;opacity:${.45+i*.13}" data-h="${R.lv[i]/mx*80}"></div><div class="n">${l}</div></div>`).join('')}</div>
+    <div class="avg">Ангийн дундаж <b>${fmt(R.avg,1)}%</b> · Эс → Эд → Эрхтэн → Тогтолцоо → Организм</div>`;
+  document.body.appendChild(el);
+  requestAnimationFrame(() => setTimeout(() => el.querySelectorAll('.stem').forEach(x => x.style.height = x.dataset.h+'%'), 60));
+  el.requestFullscreen?.().catch(()=>{});
+}
+function closeProj(){ document.getElementById('proj')?.remove(); if(document.fullscreenElement) document.exitFullscreen(); }
+document.addEventListener('keydown', e => { if(e.key==='Escape'){ closeProj(); closeModal(); } });
+document.addEventListener('fullscreenchange', () => { if(!document.fullscreenElement) document.getElementById('proj')?.remove(); });
+
+/* ================== Сурагчид ================== */
+function vStudents(){
+  const c = cls(); if(!c) return noClass();
+  const list = sortedStudents(c).map((s,i) => `<tr><td class="n hint">${i+1}</td><td>${esc(s.name)}</td><td>${esc(s.sub)}</td>
+    <td style="text-align:right"><button class="btn sm ghost" onclick="editS('${s.id}')">Засах</button><button class="btn sm ghost dan" onclick="delS('${s.id}')">Хасах</button></td></tr>`).join('');
+  return `<h1>Сурагчид · ${esc(c.name)}</h1><p class="sub">${c.students.length} сурагч${c.kind==='Сонгон'?' · сонгон хичээл тул анги бүрийг нь тэмдэглэж болно':''}</p>
+    <div class="two">
+      <div class="card">${c.students.length ? `<div class="row" style="margin-bottom:8px">${sortSel()}</div><table><thead><tr><th class="n">№</th><th>Овог нэр</th><th>Анги</th><th></th></tr></thead><tbody>${list}</tbody></table>` : '<div class="empty">Сурагч алга</div>'}</div>
+      <div class="card"><h2>Нэрс нэмэх</h2>
+        <p class="hint">Мөр бүрт нэг сурагч. eSchool эсвэл Excel-ээс хуулж тавьж болно. Сонгон хичээлд анги нэмэх бол: <code>Б. Мөнхбат ; 10а</code></p>
+        <textarea id="fPaste" rows="12" style="width:100%" placeholder="Б. Анужин&#10;Г. Тэмүүлэн&#10;Д. Номин"></textarea>
+        <div class="row" style="margin-top:10px"><button class="btn pri" onclick="addPaste()">Нэмэх</button></div>
+      </div>
+    </div>`;
+}
+function addPaste(){
+  const c = cls(), lines = document.getElementById('fPaste').value.split(/\r?\n/).map(x => x.trim()).filter(Boolean);
+  let n = 0;
+  lines.forEach(l => { let [name, sub] = l.split(/\s*[;\t]\s*/); name = name.replace(/^\d+[\.\)]?\s*/, '').trim(); if(name){ c.students.push({id:uid(), name, sub:(sub||'').trim()}); n++; } });
+  save(); render(); toast(`${n} сурагч нэмэгдлээ`);
+}
+function editS(id){
+  const s = cls().students.find(x => x.id===id);
+  modal(`<h2>Сурагч засах</h2>
+    <div class="fld"><label>Овог нэр</label><input type="text" id="fN" value="${esc(s.name)}"></div>
+    <div class="fld"><label>Анги (сонгон хичээлд)</label><input type="text" id="fS" value="${esc(s.sub)}"></div>
+    <div class="row" style="justify-content:flex-end"><button class="btn ghost" onclick="closeModal()">Болих</button><button class="btn pri" onclick="saveS('${id}')">Хадгалах</button></div>`);
+}
+function saveS(id){ const s = cls().students.find(x => x.id===id); s.name = document.getElementById('fN').value.trim() || s.name; s.sub = document.getElementById('fS').value.trim(); save(); closeModal(); render(); }
+function delS(id){
+  const c = cls(), s = c.students.find(x => x.id===id);
+  if(!confirm(`${s.name}-г ангиас хасах уу? Түүний оноо, ирц мөн устна.`)) return;
+  c.students = c.students.filter(x => x.id!==id);
+  for(const a in S.scores) delete S.scores[a][id];
+  for(const d in (S.att[c.id]||{})) delete S.att[c.id][d].m[id];
+  save(); render();
+}
+
+/* ================== Тохиргоо ================== */
+function vSettings(){
+  const st = S.settings; const sum = st.cats.reduce((a,k)=>a+(+k.w||0),0);
+  return `<h1>Тохиргоо</h1><p class="sub">Өгөгдөл зөвхөн энэ компьютерийн хөтөч дотор хадгалагдана — интернэт хэрэггүй.</p>
+  <div class="two">
+    <div class="card"><h2>Ерөнхий</h2>
+      <div class="fld"><label>Багшийн нэр</label><input type="text" value="${esc(st.teacher)}" onchange="S.settings.teacher=this.value;save();render()"></div>
+      <div class="fld"><label>Сургууль</label><input type="text" value="${esc(st.school)}" onchange="S.settings.school=this.value;save();render()"></div>
+      <div class="two"><div class="fld"><label>Хичээл</label><input type="text" value="${esc(st.subject)}" onchange="S.settings.subject=this.value;save();render()"></div>
+      <div class="fld"><label>Хичээлийн жил</label><input type="text" value="${esc(st.year)}" onchange="S.settings.year=this.value;save();render()"></div></div>
+      <div class="two"><div class="fld"><label>Улирлын тоо</label><select onchange="S.settings.terms=+this.value;if(S.ui.term>S.settings.terms)S.ui.term=1;save();render()">${[2,3,4].map(n=>`<option ${n===st.terms?'selected':''}>${n}</option>`).join('')}</select></div>
+      <div class="fld"><label>Био түвшин, ангид харуулах</label><select onchange="S.settings.fun=this.value==='1';save();render()"><option value="1" ${st.fun?'selected':''}>Асаалттай</option><option value="0" ${!st.fun?'selected':''}>Унтраалттай</option></select></div></div>
+    </div>
+    <div class="card"><h2>Дүнгийн бүрэлдэхүүн (жин)</h2>
+      <table><tbody>${st.cats.map((k,i) => `<tr><td><input type="text" value="${esc(k.name)}" onchange="S.settings.cats[${i}].name=this.value;save()" style="width:100%"></td>
+        <td style="width:90px"><input type="number" min="0" max="100" value="${k.w}" onchange="S.settings.cats[${i}].w=+this.value;save();render()" style="width:70px"> %</td>
+        <td style="width:40px">${st.cats.length>1?`<button class="btn sm ghost dan" onclick="delCat(${i})">×</button>`:''}</td></tr>`).join('')}</tbody></table>
+      <div class="row" style="margin-top:8px;justify-content:space-between"><button class="btn sm" onclick="S.settings.cats.push({id:uid(),name:'Шинэ ангилал',w:0});save();render()">+ Ангилал</button>
+      <span class="${sum===100?'up':'down'}">Нийт: ${sum}%${sum===100?'':' — 100 болгоорой'}</span></div>
+      <h2 style="margin-top:18px">Үсгэн үнэлгээний босго</h2>
+      <div class="row">${st.scale.map((x,i) => `<label class="row" style="gap:4px"><span class="pill L-${x.l}">${x.l}</span> ≥ <input type="number" value="${x.min}" style="width:62px" onchange="S.settings.scale[${i}].min=+this.value;save()"></label>`).join('')}</div>
+    </div>
+  </div>
+  <div class="card"><h2>Ангиуд</h2>
+    <table><thead><tr><th>Нэр</th><th>Төрөл</th><th class="n">Сурагч</th><th></th></tr></thead><tbody>
+    ${S.classes.map((c,i) => `<tr><td><input type="text" value="${esc(c.name)}" onchange="S.classes[${i}].name=this.value;save();render()"></td>
+      <td><select onchange="S.classes[${i}].kind=this.value;save();render()"><option ${c.kind==='Үндсэн'?'selected':''}>Үндсэн</option><option ${c.kind==='Сонгон'?'selected':''}>Сонгон</option></select></td>
+      <td class="n">${c.students.length}</td><td style="text-align:right"><button class="btn sm ghost dan" onclick="delClass('${c.id}')">Устгах</button></td></tr>`).join('')}
+    </tbody></table>
+    <button class="btn sm" style="margin-top:10px" onclick="addClass()">+ Анги нэмэх</button>
+  </div>
+  <div class="card"><h2>Нөөц ба шилжүүлэх</h2>
+    <p class="hint">Нөөц файлаа (.json) Google Drive эсвэл флаш руу хуулж хадгалаарай. Өөр компьютерт энэ апп-аа нээгээд «Нөөцөөс сэргээх» дарвал бүх өгөгдөл буцаж орно.</p>
+    <div class="row"><button class="btn pri" onclick="exportJSON()">Нөөц татах</button>
+      <label class="btn">Нөөцөөс сэргээх<input type="file" accept=".json" style="display:none" onchange="importJSON(this.files[0])"></label>
+      <span style="flex:1"></span><button class="btn ghost dan" onclick="wipe()">Бүх өгөгдлийг устгах</button></div>
+    <p class="hint">Сүүлийн нөөц: ${st.lastBackup? new Date(st.lastBackup).toLocaleString('mn-MN') : 'хийгээгүй'}</p>
+  </div>`;
+}
+function delCat(i){ const k = S.settings.cats[i]; if(S.assessments.some(a => a.cat===k.id) && !confirm('Энэ ангилалд үнэлгээ байна. Устгавал тэр үнэлгээнүүд дүнд тооцогдохгүй. Үргэлжлүүлэх үү?')) return; S.settings.cats.splice(i,1); save(); render(); }
+function addClass(){ const n = prompt('Ангийн нэр (ж: 10Б)'); if(!n) return; const c = {id:uid(), name:n.trim(), kind:'Үндсэн', grade:parseInt(n)||0, students:[]}; S.classes.push(c); S.ui.classId = c.id; save(); render(); }
+function delClass(id){
+  const c = S.classes.find(x => x.id===id);
+  if(!confirm(`${c.name} ангийг бүх сурагч, дүн, ирцтэй нь устгах уу?`)) return;
+  S.assessments.filter(a => a.classId===id).forEach(a => delete S.scores[a.id]);
+  S.assessments = S.assessments.filter(a => a.classId!==id); delete S.att[id];
+  S.classes = S.classes.filter(x => x.id!==id); fix(); save(); render();
+}
+function download(name, text, type){ const b = new Blob([text], {type}); const a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = name; document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 1000); }
+function exportJSON(){ S.settings.lastBackup = Date.now(); save(); download(`bagshiin-journal-noots-${today()}.json`, JSON.stringify(S,null,1), 'application/json'); render(); toast('Нөөц татагдлаа'); }
+function importJSON(f){
+  if(!f) return; const r = new FileReader();
+  r.onload = () => { try{ const d = JSON.parse(r.result); if(!d.classes || !d.settings) throw 0; if(!confirm('Одоогийн өгөгдлийг нөөцийн өгөгдлөөр солих уу?')) return; S = d; fix(); save(); render(); toast('Сэргээгдлээ'); } catch(e){ alert('Энэ файл журналын нөөц биш байна.'); } };
+  r.readAsText(f);
+}
+function wipe(){ if(prompt('Бүх өгөгдөл устана. Итгэлтэй бол УСТГА гэж бичнэ үү')!=='УСТГА') return; localStorage.removeItem(KEY); S = seed(); save(); render(); }
+
+/* ================== Туслах ================== */
+function modal(h, wide){ closeModal(); const m = document.createElement('div'); m.className = 'modal'; m.id = 'modal'; m.innerHTML = `<div class="box ${wide?'wide':''}">${h}</div>`; m.onclick = e => { if(e.target===m) closeModal(); }; document.body.appendChild(m); }
+function closeModal(){ document.getElementById('modal')?.remove(); }
+function noClass(){ return `<div class="card empty">Анги алга. Тохиргоо хэсэгт анги нэмнэ үү.</div>`; }
+function noStudents(c){ return `<h1>${esc(c.name)}</h1><div class="card empty">Энэ ангид сурагч алга.<br><br><button class="btn pri" onclick="go('students')">Сурагчдын нэрс оруулах</button></div>`; }
+
+load(); render();
+</script>
+</body>
+</html>
