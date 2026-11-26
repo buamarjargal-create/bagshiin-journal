@@ -222,6 +222,8 @@ const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt
 const today = () => { const d = new Date(); d.setMinutes(d.getMinutes()-d.getTimezoneOffset()); return d.toISOString().slice(0,10); };
 const fmt = (v, d=0) => v==null || isNaN(v) ? '—' : (Math.round(v*10**d)/10**d).toString();
 const mnSort = (a,b) => a.localeCompare(b,'mn');
+const givenName = n => String(n||'').replace(/^\s*\S{1,3}\.\s*/,'');
+const nameSort = (a,b) => mnSort(givenName(a.name),givenName(b.name)) || mnSort(a.name,b.name);
 
 function seed(){
   const mk = (name, kind, grade, list) => ({id:uid(), name, kind, grade, students:(list||[]).map(([n,sub]) => ({id:uid(), name:n, sub:sub||''}))});
@@ -303,8 +305,8 @@ function attOf(c, st, t){
 }
 function sortedStudents(c){
   const arr = [...c.students];
-  if(S.ui.sort==='name') arr.sort((a,b) => mnSort(a.name,b.name));
-  if(S.ui.sort==='sub') arr.sort((a,b) => mnSort(a.sub||'',b.sub||'') || mnSort(a.name,b.name));
+  if(S.ui.sort==='name') arr.sort(nameSort);
+  if(S.ui.sort==='sub') arr.sort((a,b) => mnSort(a.sub||'',b.sub||'') || nameSort(a,b));
   if(S.ui.sort==='total') arr.sort((a,b) => (calc(c,b,S.ui.term).total??-1) - (calc(c,a,S.ui.term).total??-1));
   return arr;
 }
