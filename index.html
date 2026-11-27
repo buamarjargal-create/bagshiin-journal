@@ -767,6 +767,10 @@ function vSettings(){
     </tbody></table>
     <button class="btn sm" style="margin-top:10px" onclick="addClass()">+ Анги нэмэх</button>
   </div>
+  <div class="card"><h2>Сорилтын сайт (biologybyamra)</h2>
+    <p class="hint">Ангиуд, сурагчдын нэрсийг сорилтын сайт руу илгээнэ. Дараа нь сурагчид сорилтод нэвтрэхдээ ангиа сонгоод нэрээ дардаг болно — дүн журнал руу нэр зөрөхгүй орно. Сурагч нэмж, нэр засах бүрдээ дахин дараарай.</p>
+    <div class="row"><button class="btn pri" onclick="sendRoster()">📤 Нэрсийг сорилтын сайт руу илгээх</button></div>
+  </div>
   <div class="card"><h2>Нөөц ба шилжүүлэх</h2>
     <p class="hint">Нөөц файлаа (.json) Google Drive эсвэл флаш руу хуулж хадгалаарай. Өөр компьютерт энэ апп-аа нээгээд «Нөөцөөс сэргээх» дарвал бүх өгөгдөл буцаж орно.</p>
     <div class="row"><button class="btn pri" onclick="exportJSON()">Нөөц татах</button>
@@ -805,6 +809,10 @@ function qNorm(s){ return String(s||'').toLowerCase().replace(/ё/g,'е').replac
 function qCore(s){ return qNorm(String(s||'').replace(/\(\s*\d+\s*\)|\(\?\)/g,'')).split(' ').filter(w => w.length>1).join(' '); } // овгийн үсэг (Б.) хасна
 function qMatch(c, row){
   const qc = qCore(row.n), qf = qNorm(row.n), qcls = qNorm(row.c).replace(/\s/g,'');
+  // яг ижил бүтэн нэр (жагсаалтаас сонгосон бол) эхэлж
+  const ex = c.students.filter(s => qNorm(s.name)===qf);
+  if(ex.length===1) return ex[0].id;
+  if(ex.length>1 && qcls){ const f = ex.filter(s => qNorm(s.sub).replace(/\s/g,'')===qcls); if(f.length===1) return f[0].id; }
   let cand = c.students.filter(s => qCore(s.name)===qc || qNorm(s.name)===qf);
   if(!cand.length && qc) cand = c.students.filter(s => { const a = qCore(s.name); return a && (a.includes(qc) || qc.includes(a)); });
   if(cand.length>1 && qcls){ const f = cand.filter(s => qNorm(s.sub).replace(/\s/g,'')===qcls); if(f.length) cand = f; }
@@ -861,6 +869,15 @@ function qApply(){
   toast(`${n} сурагчийн сорилтын дүн орлоо`);
 }
 window.addEventListener('hashchange', checkQuizImport);
+const QUIZ_URL = 'https://biologybyamra.onrender.com/teacher';
+function qB64(str){ const bytes = new TextEncoder().encode(str); let bin = ''; bytes.forEach(b => bin += String.fromCharCode(b)); return btoa(bin).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,''); }
+function sendRoster(){
+  const classes = S.classes.filter(c => c.students.length).map(c => ({ g: c.name, s: [...c.students].sort(nameSort).map(s => [s.name, s.sub||'']) }));
+  if(!classes.length){ toast('Сурагч алга'); return; }
+  const w = window.open(QUIZ_URL + '#roster=' + qB64(JSON.stringify({ v: Date.now(), classes })), '_blank');
+  if(!w) toast('Хөтөч шинэ цонх хаасан байна — зөвшөөрөөд дахин дарна уу');
+  else toast(`${classes.length} анги, ${classes.reduce((x,c) => x + c.s.length, 0)} сурагчийн нэрс илгээгдлээ`);
+}
 
 load(); render(); checkQuizImport();
 </script>
