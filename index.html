@@ -281,8 +281,8 @@ function save(){
 /* ================== Тооцоо ================== */
 const cls = () => S.classes.find(c => c.id===S.ui.classId);
 const termAs = (c, t) => S.assessments.filter(a => a.classId===c.id && a.term===t).sort((a,b) => (a.date||'').localeCompare(b.date||'') || 0);
-// Тасалсан (Т) сурагчийн тухайн өдрийн бүх оноо автоматаар 0
-const absentOn = (a, sid) => { const r = a && a.date && (S.att[a.classId]||{})[a.date]; return !!(r && r.m && r.m[sid]==='т'); };
+// Тасалсан (Т), чөлөөтэй (Ч), өвчтэй (Ө) сурагчийн тухайн өдрийн бүх оноо автоматаар 0
+const absentOn = (a, sid) => { const r = a && a.date && (S.att[a.classId]||{})[a.date]; return !!(r && r.m && ['т','ч','ө'].includes(r.m[sid])); };
 const sc = (aid, sid) => { if(absentOn(S.assessments.find(x => x.id===aid), sid)) return 0; const v = (S.scores[aid]||{})[sid]; return v===undefined || v===null || v==='' ? null : +v; };
 function letter(p){ if(p==null) return '—'; for(const s of S.settings.scale) if(p >= s.min) return s.l; return S.settings.scale.at(-1).l; }
 function levelIdx(p){ if(p==null) return -1; return p>=90?4 : p>=80?3 : p>=70?2 : p>=60?1 : 0; }
@@ -504,7 +504,7 @@ function vGrades(){
   const rows = sortedStudents(c).map(s => {
     const r = calc(c,s,t);
     return `<tr><td>${esc(s.name)}${s.sub?`<span class="subcl">${esc(s.sub)}</span>`:''}</td>
-      ${as.map(a => { const v = sc(a.id,s.id); if(absentOn(a,s.id)) return `<td class="c"><input class="sc abs" value="0" disabled title="Тасалсан — оноо 0"></td>`; return `<td class="c"><input class="sc ${v!=null && v>a.max?'bad':''}" data-a="${a.id}" data-s="${s.id}" value="${v==null?'':v}" inputmode="decimal"></td>`; }).join('')}
+      ${as.map(a => { const v = sc(a.id,s.id); if(absentOn(a,s.id)) return `<td class="c"><input class="sc abs" value="0" disabled title="Ирээгүй (Т/Ч/Ө) — оноо 0"></td>`; return `<td class="c"><input class="sc ${v!=null && v>a.max?'bad':''}" data-a="${a.id}" data-s="${s.id}" value="${v==null?'':v}" inputmode="decimal"></td>`; }).join('')}
       <td class="n" id="tot-${s.id}">${totCell(r)}</td></tr>`;
   }).join('');
   const avgRow = as.length ? `<tr><td style="color:var(--muted)">Дундаж</td>${as.map(a => { const v = c.students.map(s => sc(a.id,s.id)).filter(x => x!=null); return `<td class="c hint">${v.length? fmt(v.reduce((x,y)=>x+y,0)/v.length/a.max*100)+'%' : ''}</td>`; }).join('')}<td></td></tr>` : '';
@@ -514,7 +514,7 @@ function vGrades(){
       ${sortSel()}
     </div>
     ${as.length ? `<div class="tw"><table><thead><tr><th>Сурагч</th>${head}<th class="n">Нийт</th></tr></thead><tbody>${rows}${avgRow}</tbody></table></div>
-      <p class="hint">Хоосон нүд тооцоонд орохгүй (тэг биш). Ирцэд «Т» (тасалсан) тэмдэглэсэн сурагчийн тэр өдрийн бүх оноо автоматаар 0 болно. Баганын гарчиг дээр дарж засна.</p>`
+      <p class="hint">Хоосон нүд тооцоонд орохгүй (тэг биш). Ирцэд «Т» (тасалсан), «Ч» (чөлөөтэй), «Ө» (өвчтэй) тэмдэглэсэн сурагчийн тэр өдрийн бүх оноо автоматаар 0 болно. Баганын гарчиг дээр дарж засна.</p>`
       : `<div class="card empty">Энэ улиралд үнэлгээ алга. «+ Үнэлгээ нэмэх» дарж сорил, лаборатори, даалгавар үүсгээрэй.</div>`}`;
 }
 function totCell(r){ return r.total==null ? '<span class="hint">—</span>' : `<b>${fmt(r.total,1)}</b> <span class="pill L-${r.L}">${r.L}</span>`; }
