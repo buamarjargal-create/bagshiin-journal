@@ -4,91 +4,99 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Багшийн журнал</title>
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%236b8f71'/%3E%3Cpath d='M20 44c0-14 10-24 26-26-2 16-12 26-26 26z' fill='%23f7f5f0'/%3E%3Cpath d='M20 44l16-16' stroke='%236b8f71' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%233e6fa3'/%3E%3Cpath d='M20 44c0-14 10-24 26-26-2 16-12 26-26 26z' fill='%23f7f5f0'/%3E%3Cpath d='M20 44l16-16' stroke='%233e6fa3' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700&display=swap">
 <style>
 :root{
-  --bg:#F6F1EA; --card:#FFFDF9; --ink:#3D3631; --muted:#8C8178; --line:#EDE5DA;
-  --teal:#6B8F71; --teal-d:#567A5D; --teal-l:#E4EDE1;
-  --sage:#7FA584; --sage-l:#E6F0E3; --coral:#C9775B; --coral-l:#F9E3D9;
-  --sand:#B58A2E; --sand-l:#F8ECCB; --sky:#5B82A6; --sky-l:#E1EBF3; --lav:#7F6AA3; --lav-l:#ECE6F4;
-  --soft:#F8F3EC; --r:20px;
-  --shadow:0 1px 2px rgba(80,60,40,.04),0 6px 20px rgba(80,60,40,.05);
+  /* Сүүн зөөлөн цэнхэр + цагаан */
+  --bg:#EEF4FA; --card:#FFFFFF; --ink:#1E2B3A; --muted:#66788C; --line:#D9E4EF;
+  --teal:#3E6FA3; --teal-d:#2F5A88; --teal-l:#E3EDF8;
+  --sage:#4F8C6B; --sage-l:#E2F0E8; --coral:#B9534A; --coral-l:#FBE8E5;
+  --sand:#A77A22; --sand-l:#FAF0DA; --sky:#3E6FA3; --sky-l:#E3EDF8; --lav:#6159A0; --lav-l:#ECEAF7;
+  --soft:#F4F8FC; --day:#F1F6FC; --dayline:#BCD0E6; --r:12px;
+  --shadow:0 1px 2px rgba(30,43,58,.05),0 2px 10px rgba(30,43,58,.04);
 }
 *{box-sizing:border-box}
-html,body{margin:0;background:var(--bg);color:var(--ink);font:14.5px/1.5 Nunito,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}
-body{background:radial-gradient(1200px 600px at 100% -10%,#FBEFE3 0,transparent 60%),radial-gradient(900px 500px at -10% 110%,#EAF1E6 0,transparent 60%),var(--bg);background-attachment:fixed}
+html,body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.5 "Noto Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}
+body{background:var(--bg)}
 button,input,select,textarea{font:inherit;color:inherit}
 ::selection{background:var(--teal-l)}
 .app{display:flex;gap:22px;padding:22px;min-height:100vh;align-items:flex-start}
-.side{position:sticky;top:22px;flex:none;width:96px;background:var(--card);border:1px solid var(--line);box-shadow:var(--shadow);border-radius:28px;padding:18px 10px;display:flex;flex-direction:column;align-items:center;gap:6px;min-height:calc(100vh - 44px)}
-.side .logo{width:48px;height:48px;border-radius:16px;background:var(--teal-l);display:flex;align-items:center;justify-content:center;margin-bottom:16px}
+.side{position:sticky;top:22px;flex:none;width:96px;background:var(--card);border:1px solid var(--line);box-shadow:var(--shadow);border-radius:8px;padding:18px 10px;display:flex;flex-direction:column;align-items:center;gap:6px;min-height:calc(100vh - 44px)}
+.side .logo{width:44px;height:44px;border-radius:10px;background:var(--teal-l);display:flex;align-items:center;justify-content:center;margin-bottom:16px}
 .side .logo svg{width:24px;height:24px}
 nav{display:flex;flex-direction:column;gap:4px;width:100%}
-nav button{border:0;background:transparent;padding:10px 4px;border-radius:16px;cursor:pointer;color:var(--muted);display:flex;flex-direction:column;align-items:center;gap:5px;font-size:12px;font-weight:600;width:100%;transition:background .15s,color .15s}
+nav button{border:0;background:transparent;padding:10px 4px;border-radius:8px;cursor:pointer;color:var(--muted);display:flex;flex-direction:column;align-items:center;gap:5px;font-size:12px;font-weight:600;width:100%;transition:background .15s,color .15s}
 nav button svg{width:21px;height:21px}
 nav button:hover{background:var(--soft);color:var(--ink)}
-nav button.on{background:var(--teal-l);color:var(--teal-d);font-weight:800}
+nav button.on{background:var(--teal);color:#fff;font-weight:600}
 .wrap{flex:1;min-width:0;padding:8px 8px 24px;min-height:calc(100vh - 44px)}
 header{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:22px}
-.htitle{font-weight:800;font-size:15px;letter-spacing:.1px}
+.htitle{font-weight:700;font-size:15px;letter-spacing:.1px}
 .htitle small{display:block;font-weight:500;color:var(--muted);font-size:12.5px}
 .pick{margin-left:auto;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-select,input[type=text],input[type=date],input[type=number],textarea{border:1px solid var(--line);background:var(--card);border-radius:14px;padding:8px 12px;outline:none;transition:border-color .15s,box-shadow .15s}
+select,input[type=text],input[type=date],input[type=number],textarea{border:1px solid var(--line);background:var(--card);border-radius:8px;padding:8px 12px;outline:none;transition:border-color .15s,box-shadow .15s}
 select{cursor:pointer}
 select:focus,input:focus,textarea:focus{border-color:var(--teal);box-shadow:0 0 0 3px var(--teal-l)}
 main{max-width:1320px}
-@media(max-width:760px){.app{flex-direction:column;padding:10px;gap:10px}.side{position:static;width:100%;min-height:0;flex-direction:row;padding:8px;border-radius:22px;overflow-x:auto}.side .logo{display:none}nav{flex-direction:row}nav button{min-width:68px}.wrap{padding:6px}}
-h1{font-size:30px;margin:0 0 4px;font-weight:800;letter-spacing:-.3px}
-h2{font-size:18px;margin:0 0 12px;font-weight:800}
+@media(max-width:760px){.app{flex-direction:column;padding:10px;gap:10px}.side{position:static;width:100%;min-height:0;flex-direction:row;padding:8px;border-radius:12px;overflow-x:auto}.side .logo{display:none}nav{flex-direction:row}nav button{min-width:68px}.wrap{padding:6px}}
+h1{font-size:24px;margin:0 0 4px;font-weight:700;letter-spacing:-.2px}
+h2{font-size:18px;margin:0 0 12px;font-weight:700}
 .sub{color:var(--muted);margin:0 0 20px}
 .card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:20px;margin-bottom:16px;box-shadow:var(--shadow)}
 .grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fill,minmax(230px,1fr))}
 .cls{cursor:default;transition:transform .15s,box-shadow .15s}
 .cls:hover{transform:translateY(-2px)}
-.cls .nm{font-size:20px;font-weight:800}
+.cls .nm{font-size:20px;font-weight:700}
 .tag{display:inline-block;font-size:11px;padding:3px 10px;border-radius:999px;background:var(--sage-l);color:var(--teal-d);margin-left:6px;vertical-align:middle;font-weight:700}
 .tag.el{background:var(--lav-l);color:var(--lav)}
 .kv{display:flex;justify-content:space-between;color:var(--muted);font-size:13px;margin-top:6px}
 .kv b{color:var(--ink);font-weight:700}
 .row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-.btn{border:1px solid var(--line);background:var(--card);padding:8px 15px;border-radius:14px;cursor:pointer;white-space:nowrap;font-weight:600;transition:all .15s}
-.btn:hover{border-color:#DCCFBF;background:#fff}
-.btn.pri{background:var(--teal);border-color:var(--teal);color:#fff;box-shadow:0 4px 12px rgba(107,143,113,.25)}
+.btn{border:1px solid var(--line);background:var(--card);padding:8px 15px;border-radius:8px;cursor:pointer;white-space:nowrap;font-weight:600;transition:all .15s}
+.btn:hover{border-color:#BCD0E6;background:#fff}
+.btn.pri{background:var(--teal);border-color:var(--teal);color:#fff;box-shadow:0 4px 12px rgba(62,111,163,.22)}
 .btn.pri:hover{background:var(--teal-d)}
 .btn.ghost{border-color:transparent;background:transparent;color:var(--muted)}
 .btn.ghost:hover{color:var(--ink);background:var(--soft)}
 .btn.dan{color:var(--coral)}
 .btn.sm{padding:4px 10px;font-size:12px;border-radius:10px}
 table{border-collapse:separate;border-spacing:0;width:100%}
-th,td{padding:8px 10px;border-bottom:1px solid #F3ECE2;text-align:left;white-space:nowrap}
-th{font-size:12px;color:var(--muted);font-weight:600;background:var(--soft);position:sticky;top:0}
+th,td{padding:8px 10px;border-bottom:1px solid #E7EEF6;text-align:left;white-space:nowrap}
+th{font-size:12px;color:#4A5D72;font-weight:600;background:var(--soft);position:sticky;top:0}
 td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
 td.c,th.c{text-align:center}
-.tw{overflow:auto;max-height:68vh;border:1px solid var(--line);border-radius:20px;background:var(--card);box-shadow:var(--shadow)}
+.tw{overflow:auto;max-height:68vh;border:1px solid var(--line);border-radius:12px;background:var(--card);box-shadow:var(--shadow)}
 .tw table th:first-child,.tw table td:first-child{position:sticky;left:0;background:inherit;z-index:1}
 .tw tr{background:var(--card)}
-.tw tbody tr:nth-child(even){background:#FCF8F3}
-.tw tbody tr:hover{background:#F5EFE6}
+.tw tbody tr:nth-child(even){background:#FAFCFE}
+.tw tbody tr:hover{background:#EAF2FA}
 .tw tbody tr:last-child td{border-bottom:0}
 .tw thead tr{background:var(--soft)}
 .tw thead th{z-index:2;border-bottom:1px solid var(--line)}
 .tw thead th:first-child{z-index:3}
 .tw td:first-child{font-weight:600}
 .subcl{color:var(--muted);font-size:12px;margin-left:4px;font-weight:500}
-input.sc{width:52px;text-align:center;padding:5px 4px;border-radius:10px;border:1px solid transparent;background:#F4EEE5;font-weight:700;font-variant-numeric:tabular-nums;transition:background .12s,border-color .12s}
-input.sc:hover{border-color:#E3D7C7;background:#fff}
+input.sc{width:50px;text-align:center;padding:5px 4px;border-radius:6px;border:1px solid transparent;background:#F1F6FB;font-weight:700;font-variant-numeric:tabular-nums;transition:background .12s,border-color .12s}
+input.sc:hover{border-color:#BCD0E6;background:#fff}
 input.sc:focus{background:#fff}
 input.sc.bad{border-color:var(--coral);background:var(--coral-l)}
 input.sc.abs{background:var(--coral-l);color:var(--coral);cursor:not-allowed;opacity:1}
 input.sc.exc{border:1px dashed var(--coral);color:var(--coral)}
 .ah{cursor:pointer;line-height:1.25}
+.tw td.dg1,.tw th.dg1{background-color:rgba(62,111,163,.055)}
+.tw td.ds,.tw th.ds{border-left:2px solid var(--dayline)}
+.tw thead tr.grp th{height:36px;padding:6px 10px;background:var(--teal-l);color:var(--teal-d);font-size:12.5px;font-weight:700;border-bottom:1px solid var(--dayline)}
+.tw thead tr.grp th.dg1{background:#D6E4F3}
+.tw thead tr.grp th .wd{font-weight:500;color:#4A6C92;margin-left:4px}
+.tw thead tr.sub2 th{top:36px}
+.tw thead tr.grp th[rowspan]{vertical-align:bottom;background:var(--soft);color:#4A5D72}
 .ah:hover{color:var(--ink)}
 .ah .t{display:block;color:var(--ink);font-weight:700;max-width:110px;overflow:hidden;text-overflow:ellipsis}
 .ah .m{font-size:11px}
 .pill{display:inline-block;min-width:26px;text-align:center;padding:2px 8px;border-radius:999px;font-weight:700;font-size:12px}
-.L-A{background:var(--sage-l);color:#4E7A55}.L-B{background:var(--sky-l);color:#4A6E8F}.L-C{background:var(--sand-l);color:#8A6A1F}.L-D{background:var(--lav-l);color:#6E5A92}.L-F{background:var(--coral-l);color:#A8573D}.L-x{background:#F1EBE2;color:var(--muted)}
+.L-A{background:var(--sage-l);color:#4E7A55}.L-B{background:var(--sky-l);color:#4A6E8F}.L-C{background:var(--sand-l);color:#8A6A1F}.L-D{background:var(--lav-l);color:#6E5A92}.L-F{background:var(--coral-l);color:#A8573D}.L-x{background:#EDF3F9;color:var(--muted)}
 .seg{display:inline-flex;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--card)}
 .seg button{border:0;background:transparent;padding:6px 10px;cursor:pointer;color:var(--muted);border-right:1px solid var(--line);font-size:13px}
 .seg button:last-child{border-right:0}
@@ -99,11 +107,11 @@ input.sc.exc{border:1px dashed var(--coral);color:var(--coral)}
 .seg button.on.т{background:var(--coral-l);color:#A8573D;font-weight:700}
 .mk{display:inline-block;width:22px;height:22px;line-height:22px;border-radius:7px;font-size:12px;font-weight:700;text-align:center}
 .mk.х{background:var(--sand-l);color:#8A6A1F}.mk.ч{background:var(--sky-l);color:#4A6E8F}.mk.ө{background:var(--lav-l);color:#6E5A92}.mk.т{background:var(--coral-l);color:#A8573D}
-.mk.p{color:#D3C8BA}
+.mk.p{color:#C2CFDD}
 .legend{display:flex;gap:14px;flex-wrap:wrap;color:var(--muted);font-size:12px;margin-top:12px}
 .stats{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;margin-bottom:16px}
-.stat{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:15px 17px;box-shadow:var(--shadow)}
-.stat .v{font-size:26px;font-weight:800;font-variant-numeric:tabular-nums}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:15px 17px;box-shadow:var(--shadow)}
+.stat .v{font-size:26px;font-weight:700;font-variant-numeric:tabular-nums}
 .stat .l{color:var(--muted);font-size:12px}
 .bars{display:flex;align-items:flex-end;gap:10px;height:110px;padding-top:8px}
 .bar{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;gap:4px;font-size:12px;color:var(--muted)}
@@ -112,10 +120,10 @@ input.sc.exc{border:1px dashed var(--coral);color:var(--coral)}
 .lvl{font-size:12px;color:var(--muted)}
 .lvl b{font-weight:700;color:var(--ink)}
 .up{color:#4E7A55}.down{color:#A8573D}
-.banner{background:var(--sand-l);border:1px solid #EEDDB3;color:#7A5C22;border-radius:16px;padding:10px 14px;margin-bottom:16px;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.banner{background:var(--sand-l);border:1px solid #EAD9AE;color:#7A5C22;border-radius:8px;padding:10px 14px;margin-bottom:16px;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
 .empty{color:var(--muted);text-align:center;padding:30px 10px}
-.modal{position:fixed;inset:0;background:rgba(61,54,49,.28);backdrop-filter:blur(3px);display:flex;align-items:center;justify-content:center;z-index:50;padding:20px}
-.modal .box{background:var(--card);border-radius:24px;padding:24px;width:min(520px,100%);max-height:90vh;overflow:auto;box-shadow:0 24px 60px rgba(80,60,40,.18)}
+.modal{position:fixed;inset:0;background:rgba(30,43,58,.30);backdrop-filter:blur(3px);display:flex;align-items:center;justify-content:center;z-index:50;padding:20px}
+.modal .box{background:var(--card);border-radius:8px;padding:24px;width:min(520px,100%);max-height:90vh;overflow:auto;box-shadow:0 24px 60px rgba(30,43,58,.18)}
 .modal .box.wide{width:min(760px,100%)}
 .fld{display:flex;flex-direction:column;gap:4px;margin-bottom:12px}
 .fld label{font-size:12px;color:var(--muted);font-weight:600}
@@ -128,18 +136,18 @@ input.sc.exc{border:1px dashed var(--coral);color:var(--coral)}
 .wk{display:grid;grid-template-columns:repeat(5,minmax(190px,1fr));gap:14px;min-width:1000px}
 .wkx{overflow-x:auto;padding-bottom:4px}
 .day{display:flex;flex-direction:column;gap:12px;min-width:0}
-.dh{background:var(--card);border:1px solid var(--line);color:var(--ink);border-radius:18px;padding:13px 15px}
-.dh b{font-size:17px;font-weight:800}
+.dh{background:var(--card);border:1px solid var(--line);color:var(--ink);border-radius:10px;padding:13px 15px}
+.dh b{font-size:17px;font-weight:700}
 .dh span{float:right;font-size:12px;color:var(--muted);margin-top:3px}
 .dh small{display:block;font-size:11px;color:var(--muted);margin-top:3px}
 .day.today .dh{background:var(--teal);border-color:var(--teal);color:#fff}
-.day.today .dh span,.day.today .dh small{color:#EAF3E8}
-.les{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:14px;display:flex;flex-direction:column;gap:11px;cursor:pointer;text-align:left;width:100%;transition:border-color .15s,transform .15s,box-shadow .15s;box-shadow:var(--shadow)}
-.les:hover{border-color:#DCCFBF;transform:translateY(-2px)}
-.les .tm{display:flex;justify-content:space-between;align-items:center;font-weight:800;font-size:15px;font-variant-numeric:tabular-nums}
+.day.today .dh span,.day.today .dh small{color:#DCE8F5}
+.les{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px;display:flex;flex-direction:column;gap:11px;cursor:pointer;text-align:left;width:100%;transition:border-color .15s,transform .15s,box-shadow .15s;box-shadow:var(--shadow)}
+.les:hover{border-color:#BCD0E6;transform:translateY(-2px)}
+.les .tm{display:flex;justify-content:space-between;align-items:center;font-weight:700;font-size:15px;font-variant-numeric:tabular-nums}
 .les .tm i{font-style:normal;font-size:11px;font-weight:700;color:var(--muted);background:var(--soft);border-radius:999px;padding:3px 9px}
 .les .who{display:flex;align-items:center;gap:10px}
-.les .who > span{flex:none;width:40px;height:40px;border-radius:14px;font-size:13px;font-weight:800;display:flex;align-items:center;justify-content:center}
+.les .who > span{flex:none;width:40px;height:40px;border-radius:8px;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center}
 .les .who b{display:block;font-size:15px}
 .les .who small{display:block;font-size:12px;color:var(--muted);margin-top:1px}
 .les .ft{border-top:1px dashed var(--line);padding-top:9px;font-size:12px;color:var(--muted);display:flex;justify-content:space-between}
@@ -149,24 +157,24 @@ input.sc.exc{border:1px dashed var(--coral);color:var(--coral)}
 .bell b{font-variant-numeric:tabular-nums}
 .todayrow{display:grid;gap:12px;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));margin-bottom:18px}
 /* Student card */
-.scard{border:1px solid var(--line);border-radius:20px;padding:20px 22px;background:var(--card);page-break-inside:avoid;break-inside:avoid;margin-bottom:16px}
+.scard{border:1px solid var(--line);border-radius:12px;padding:20px 22px;background:var(--card);page-break-inside:avoid;break-inside:avoid;margin-bottom:16px}
 .scard .hd{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;border-bottom:1px solid var(--line);padding-bottom:10px;margin-bottom:12px}
 .scard .who{font-size:18px;font-weight:700}
-.scard .big{font-size:30px;font-weight:800;text-align:right;line-height:1}
+.scard .big{font-size:30px;font-weight:700;text-align:right;line-height:1}
 .scard table td,.scard table th{padding:5px 6px}
 .path{display:flex;gap:4px;margin:12px 0 6px}
-.path span{flex:1;text-align:center;font-size:11px;padding:6px 2px;border-radius:10px;background:#F3EDE4;color:var(--muted)}
+.path span{flex:1;text-align:center;font-size:11px;padding:6px 2px;border-radius:10px;background:#EDF3F9;color:var(--muted)}
 .path span.on{background:var(--sage);color:#fff;font-weight:700}
 .path span.done{background:var(--sage-l);color:#4E7A55}
 .cmt{border-top:1px dashed var(--line);margin-top:10px;padding-top:8px;min-height:40px;white-space:pre-wrap}
 /* Projector */
 #proj{position:fixed;inset:0;background:var(--bg);z-index:80;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px}
-#proj .t{font-size:clamp(22px,3vw,40px);font-weight:800;margin-bottom:6px}
+#proj .t{font-size:clamp(22px,3vw,40px);font-weight:700;margin-bottom:6px}
 #proj .s{color:var(--muted);font-size:clamp(14px,1.6vw,22px);margin-bottom:30px}
 #proj .plants{display:flex;gap:clamp(12px,3vw,48px);align-items:flex-end;height:50vh;width:min(1100px,100%)}
 #proj .pl{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%}
-#proj .pl .c{font-size:clamp(22px,3vw,44px);font-weight:800}
-#proj .pl .stem{width:60%;border-radius:24px 24px 8px 8px;background:var(--sage);opacity:.9;min-height:8px;transition:height .8s}
+#proj .pl .c{font-size:clamp(22px,3vw,44px);font-weight:700}
+#proj .pl .stem{width:60%;border-radius:8px 24px 8px 8px;background:var(--sage);opacity:.9;min-height:8px;transition:height .8s}
 #proj .pl .n{margin-top:10px;font-size:clamp(13px,1.5vw,20px);text-align:center}
 #proj .avg{margin-top:36px;font-size:clamp(16px,2vw,26px);color:var(--muted)}
 #proj .avg b{color:var(--ink)}
@@ -190,7 +198,7 @@ input.sc.exc{border:1px dashed var(--coral);color:var(--coral)}
 <body>
 <div class="app">
 <aside class="side">
-  <div class="logo"><svg viewBox="0 0 24 24" fill="none" stroke="#567A5D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 4C10 4 5 9 5 16c0 1.4.3 2.7.8 4M5.8 20C8 14 12 10 17 8"/></svg></div>
+  <div class="logo"><svg viewBox="0 0 24 24" fill="none" stroke="#2F5A88" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 4C10 4 5 9 5 16c0 1.4.3 2.7.8 4M5.8 20C8 14 12 10 17 8"/></svg></div>
   <nav id="nav" aria-label="Үндсэн цэс"></nav>
 </aside>
 <div class="wrap">
@@ -348,7 +356,7 @@ const SCHED = [
 ];
 const DAYS = ['Даваа','Мягмар','Лхагва','Пүрэв','Баасан'];
 const BELL = [['1-р цаг','08:00–08:45'],['2-р цаг','08:50–09:35'],['3-р цаг','09:40–10:25'],['4-р цаг','10:30–11:15'],['Их завсарлага','11:15–11:55'],['5–6-р цаг','11:55–13:25'],['7–8-р цаг','13:30–15:00'],['9-р цаг','15:05–15:50']];
-const PAL = [['#F7E1E2','#9E4F57'],['#ECE6F4','#6E5A92'],['#F9E5D6','#A0602F'],['#E6F0E3','#4E7A55'],['#F8ECCB','#8A6A1F'],['#E1EBF3','#4A6E8F'],['#E0EFEA','#3F7666'],['#F3E6EE','#8A4F72']];
+const PAL = [['#E3EDF8','#2F5A88'],['#E6EAF7','#3F4F8F'],['#E0F0F2','#2D6E78'],['#E2F0E8','#3D7558'],['#EEF1F5','#4A5D72'],['#DDEBF7','#28628F'],['#E4F2EF','#2F6B60'],['#ECE9F6','#55508F']];
 const CCOL = {'10 сонгон':0,'11 сонгон':1,'10 сонгон Мягмар':2,'11Г':3,'10Е':4,'10А':5,'10Б':6,'11В':7};
 const colOf = name => PAL[CCOL[name] ?? (Math.abs([...name].reduce((a,ch)=>a+ch.charCodeAt(0),0)) % PAL.length)];
 const shortName = n => /сонгон/.test(n) ? n.replace(/ сонгон.*/,'с') : n;
@@ -381,7 +389,7 @@ function vSched(){
   return `<h1>Хичээл заах хуваарь</h1>
     <p class="sub">${esc(S.settings.school)} · ${esc(S.settings.subject)} · Сүүлийн хичээл 12.18</p>
     <div class="stats">
-      <div class="stat" style="background:var(--teal);border-color:var(--teal);color:#fff"><div class="l" style="color:#EAF3E8">7 хоногт</div><div class="v">${total} цаг</div><div class="l" style="color:#EAF3E8">${SCHED.length} хичээл · ${names.length} бүлэг</div></div>
+      <div class="stat" style="background:var(--teal);border-color:var(--teal);color:#fff"><div class="l" style="color:#DCE8F5">7 хоногт</div><div class="v">${total} цаг</div><div class="l" style="color:#DCE8F5">${SCHED.length} хичээл · ${names.length} бүлэг</div></div>
       <div class="stat"><div class="l">Нийт сурагч</div><div class="v">${studs}</div><div class="l">Хуваарьт орсон бүлгүүдэд</div></div>
       <div class="stat"><div class="l">Хичээл бүрт</div><div class="row" style="margin-top:8px;gap:6px"><span class="tag" style="margin:0;background:#F7E1E2;color:#9E4F57">Сорил 5</span><span class="tag" style="margin:0;background:#E1EBF3;color:#4A6E8F">Идэвх 3</span><span class="tag" style="margin:0;background:#F8ECCB;color:#8A6A1F">Гэрийн даалгавар 2</span><span class="tag" style="margin:0">Дэвтэр 5 / 7 хоног</span></div></div>
     </div>
@@ -430,7 +438,7 @@ function vHome(){
     const avg = tots.length ? tots.reduce((a,b)=>a+b,0)/tots.length : null;
     const days = Object.keys(S.att[c.id]||{}).filter(d => S.att[c.id][d].term===t).sort();
     return `<div class="card cls">
-      <div class="nm" style="display:flex;align-items:center;gap:10px"><span style="flex:none;width:40px;height:40px;border-radius:12px;background:${colOf(c.name)[0]};color:${colOf(c.name)[1]};font-size:13px;font-weight:800;display:flex;align-items:center;justify-content:center">${esc(shortName(c.name))}</span><span>${esc(c.name)}<span class="tag ${c.kind==='Сонгон'?'el':''}">${esc(c.kind)}</span></span></div>
+      <div class="nm" style="display:flex;align-items:center;gap:10px"><span style="flex:none;width:40px;height:40px;border-radius:12px;background:${colOf(c.name)[0]};color:${colOf(c.name)[1]};font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center">${esc(shortName(c.name))}</span><span>${esc(c.name)}<span class="tag ${c.kind==='Сонгон'?'el':''}">${esc(c.kind)}</span></span></div>
       <div class="kv">Сурагч <b>${c.students.length}</b></div>
       <div class="kv">Энэ улирлын үнэлгээ <b>${as.length}</b></div>
       <div class="kv">Ангийн дундаж <b>${avg==null?'—':fmt(avg,1)+'% · '+letter(avg)}</b></div>
@@ -504,20 +512,25 @@ function vGrades(){
   const c = cls(); if(!c) return noClass();
   if(!c.students.length) return noStudents(c);
   const t = S.ui.term, as = termAs(c,t);
-  const head = as.map(a => `<th class="c"><div class="ah" onclick="editA('${a.id}')" title="Засах"><span class="t">${esc(a.title)}</span><span class="m">${esc(catName(a.cat))} · ${a.max}</span><br><span class="m">${a.date? a.date.slice(5).replace('-','.') : ''}</span></div></th>`).join('');
+  // Өдрөөр бүлэглэх: өдөр бүр ээлжилсэн өнгө, зааглах шугамтай
+  const dkeys = []; as.forEach(a => { const k = a.date||''; if(dkeys.at(-1)!==k) dkeys.push(k); });
+  const dg = a => { const i = dkeys.indexOf(a.date||''); const first = as.find(x => (x.date||'')===(a.date||''))===a; return `dg${i%2}${first?' ds':''}`; };
+  const WD = ['Ням','Даваа','Мягмар','Лхагва','Пүрэв','Баасан','Бямба'];
+  const grp = dkeys.map((k,i) => `<th class="c dg${i%2} ds" colspan="${as.filter(a => (a.date||'')===k).length}">${k ? k.slice(5).replace('-','.') + `<span class="wd">${WD[new Date(k+'T12:00').getDay()]}</span>` : 'Огноогүй'}</th>`).join('');
+  const head = as.map(a => `<th class="c ${dg(a)}"><div class="ah" onclick="editA('${a.id}')" title="Засах"><span class="t">${esc(a.title.replace(/^\d{1,2}\.\d{2}\s*/,'')||a.title)}</span><span class="m">${esc(catName(a.cat))} · ${a.max}</span></div></th>`).join('');
   const rows = sortedStudents(c).map(s => {
     const r = calc(c,s,t);
     return `<tr><td>${esc(s.name)}${s.sub?`<span class="subcl">${esc(s.sub)}</span>`:''}</td>
-      ${as.map(a => { const v = sc(a.id,s.id); if(absentOn(a,s.id)) return `<td class="c"><input class="sc abs" value="0" disabled title="Тасалсан — оноо 0"></td>`; const ex = excusedOn(a,s.id); return `<td class="c"><input class="sc ${ex?'exc':''} ${v!=null && v>a.max?'bad':''}" ${ex?'title="Чөлөөтэй/өвчтэй — нөхөж өгсөн оноог бичиж болно"':''} data-a="${a.id}" data-s="${s.id}" value="${v==null?'':v}" inputmode="decimal"></td>`; }).join('')}
+      ${as.map(a => { const v = sc(a.id,s.id); if(absentOn(a,s.id)) return `<td class="c ${dg(a)}"><input class="sc abs" value="0" disabled title="Тасалсан — оноо 0"></td>`; const ex = excusedOn(a,s.id); return `<td class="c ${dg(a)}"><input class="sc ${ex?'exc':''} ${v!=null && v>a.max?'bad':''}" ${ex?'title="Чөлөөтэй/өвчтэй — нөхөж өгсөн оноог бичиж болно"':''} data-a="${a.id}" data-s="${s.id}" value="${v==null?'':v}" inputmode="decimal"></td>`; }).join('')}
       <td class="n" id="tot-${s.id}">${totCell(r)}</td></tr>`;
   }).join('');
-  const avgRow = as.length ? `<tr><td style="color:var(--muted)">Дундаж</td>${as.map(a => { const v = c.students.map(s => sc(a.id,s.id)).filter(x => x!=null); return `<td class="c hint">${v.length? fmt(v.reduce((x,y)=>x+y,0)/v.length/a.max*100)+'%' : ''}</td>`; }).join('')}<td></td></tr>` : '';
+  const avgRow = as.length ? `<tr><td style="color:var(--muted)">Дундаж</td>${as.map(a => { const v = c.students.map(s => sc(a.id,s.id)).filter(x => x!=null); return `<td class="c hint ${dg(a)}">${v.length? fmt(v.reduce((x,y)=>x+y,0)/v.length/a.max*100)+'%' : ''}</td>`; }).join('')}<td></td></tr>` : '';
   return `<h1>Дүн · ${esc(c.name)}</h1><p class="sub">${t}-р улирал · ${as.length} үнэлгээ · оноогоо шууд бичээд Enter дарвал доошоо шилжинэ</p>
     <div class="row" style="margin-bottom:14px">
       <button class="btn pri" onclick="editA()">+ Үнэлгээ нэмэх</button>
       ${sortSel()}
     </div>
-    ${as.length ? `<div class="tw"><table><thead><tr><th>Сурагч</th>${head}<th class="n">Нийт</th></tr></thead><tbody>${rows}${avgRow}</tbody></table></div>
+    ${as.length ? `<div class="tw"><table><thead><tr class="grp"><th rowspan="2">Сурагч</th>${grp}<th class="n" rowspan="2">Нийт</th></tr><tr class="sub2">${head}</tr></thead><tbody>${rows}${avgRow}</tbody></table></div>
       <p class="hint">Хоосон нүд тооцоонд орохгүй (тэг биш). Ирцэд «Т» (тасалсан), «Ч» (чөлөөтэй), «Ө» (өвчтэй) тэмдэглэсэн сурагчийн тэр өдрийн бүх оноо автоматаар 0 болно. «Т»-ийн оноо түгжээтэй; «Ч», «Ө»-ийн оноог (тасархай хүрээтэй нүд) нөхөж өгсөн бол засаж болно. Баганын гарчиг дээр дарж засна.</p>`
       : `<div class="card empty">Энэ улиралд үнэлгээ алга. «+ Үнэлгээ нэмэх» дарж сорил, лаборатори, даалгавар үүсгээрэй.</div>`}`;
 }
