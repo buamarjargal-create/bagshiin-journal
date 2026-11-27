@@ -82,6 +82,7 @@ input.sc:hover{border-color:#E3D7C7;background:#fff}
 input.sc:focus{background:#fff}
 input.sc.bad{border-color:var(--coral);background:var(--coral-l)}
 input.sc.abs{background:var(--coral-l);color:var(--coral);cursor:not-allowed;opacity:1}
+input.sc.exc{border:1px dashed var(--coral);color:var(--coral)}
 .ah{cursor:pointer;line-height:1.25}
 .ah:hover{color:var(--ink)}
 .ah .t{display:block;color:var(--ink);font-weight:700;max-width:110px;overflow:hidden;text-overflow:ellipsis}
@@ -271,7 +272,7 @@ function load(){
 function fix(){
   S.ui = S.ui || {}; S.ui.view ||= 'home'; S.ui.term ||= 1; S.ui.date ||= today(); S.ui.sort ||= 'name';
   if(!S.classes.find(c => c.id===S.ui.classId)) S.ui.classId = S.classes[0]?.id;
-  S.scores ||= {}; S.att ||= {}; S.comments ||= {}; S.assessments ||= [];
+  S.scores ||= {}; S.mk ||= {}; S.att ||= {}; S.comments ||= {}; S.assessments ||= [];
 }
 function save(){
   try{ localStorage.setItem(KEY, JSON.stringify(S)); }
@@ -282,8 +283,11 @@ function save(){
 const cls = () => S.classes.find(c => c.id===S.ui.classId);
 const termAs = (c, t) => S.assessments.filter(a => a.classId===c.id && a.term===t).sort((a,b) => (a.date||'').localeCompare(b.date||'') || 0);
 // Тасалсан (Т), чөлөөтэй (Ч), өвчтэй (Ө) сурагчийн тухайн өдрийн бүх оноо автоматаар 0
-const absentOn = (a, sid) => { const r = a && a.date && (S.att[a.classId]||{})[a.date]; return !!(r && r.m && ['т','ч','ө'].includes(r.m[sid])); };
-const sc = (aid, sid) => { if(absentOn(S.assessments.find(x => x.id===aid), sid)) return 0; const v = (S.scores[aid]||{})[sid]; return v===undefined || v===null || v==='' ? null : +v; };
+const attMark = (a, sid) => { const r = a && a.date && (S.att[a.classId]||{})[a.date]; return (r && r.m && r.m[sid]) || ''; };
+const absentOn = (a, sid) => attMark(a, sid)==='т';
+const excusedOn = (a, sid) => ['ч','ө'].includes(attMark(a, sid));
+// Ч/Ө: анхдагч 0; нөхөж өгсөн оноог S.mk-д тусад нь хадгална
+const sc = (aid, sid) => { const a = S.assessments.find(x => x.id===aid); if(absentOn(a, sid)) return 0; const v = ((excusedOn(a, sid) ? (S.mk||{}) : S.scores)[aid]||{})[sid]; const n = v===undefined || v===null || v==='' ? null : +v; return n==null && excusedOn(a, sid) ? 0 : n; };
 function letter(p){ if(p==null) return '—'; for(const s of S.settings.scale) if(p >= s.min) return s.l; return S.settings.scale.at(-1).l; }
 function levelIdx(p){ if(p==null) return -1; return p>=90?4 : p>=80?3 : p>=70?2 : p>=60?1 : 0; }
 function calc(c, st, t){
@@ -504,7 +508,7 @@ function vGrades(){
   const rows = sortedStudents(c).map(s => {
     const r = calc(c,s,t);
     return `<tr><td>${esc(s.name)}${s.sub?`<span class="subcl">${esc(s.sub)}</span>`:''}</td>
-      ${as.map(a => { const v = sc(a.id,s.id); if(absentOn(a,s.id)) return `<td class="c"><input class="sc abs" value="0" disabled title="Ирээгүй (Т/Ч/Ө) — оноо 0"></td>`; return `<td class="c"><input class="sc ${v!=null && v>a.max?'bad':''}" data-a="${a.id}" data-s="${s.id}" value="${v==null?'':v}" inputmode="decimal"></td>`; }).join('')}
+      ${as.map(a => { const v = sc(a.id,s.id); if(absentOn(a,s.id)) return `<td class="c"><input class="sc abs" value="0" disabled title="Тасалсан — оноо 0"></td>`; const ex = excusedOn(a,s.id); return `<td class="c"><input class="sc ${ex?'exc':''} ${v!=null && v>a.max?'bad':''}" ${ex?'title="Чөлөөтэй/өвчтэй — нөхөж өгсөн оноог бичиж болно"':''} data-a="${a.id}" data-s="${s.id}" value="${v==null?'':v}" inputmode="decimal"></td>`; }).join('')}
       <td class="n" id="tot-${s.id}">${totCell(r)}</td></tr>`;
   }).join('');
   const avgRow = as.length ? `<tr><td style="color:var(--muted)">Дундаж</td>${as.map(a => { const v = c.students.map(s => sc(a.id,s.id)).filter(x => x!=null); return `<td class="c hint">${v.length? fmt(v.reduce((x,y)=>x+y,0)/v.length/a.max*100)+'%' : ''}</td>`; }).join('')}<td></td></tr>` : '';
@@ -514,7 +518,7 @@ function vGrades(){
       ${sortSel()}
     </div>
     ${as.length ? `<div class="tw"><table><thead><tr><th>Сурагч</th>${head}<th class="n">Нийт</th></tr></thead><tbody>${rows}${avgRow}</tbody></table></div>
-      <p class="hint">Хоосон нүд тооцоонд орохгүй (тэг биш). Ирцэд «Т» (тасалсан), «Ч» (чөлөөтэй), «Ө» (өвчтэй) тэмдэглэсэн сурагчийн тэр өдрийн бүх оноо автоматаар 0 болно. Баганын гарчиг дээр дарж засна.</p>`
+      <p class="hint">Хоосон нүд тооцоонд орохгүй (тэг биш). Ирцэд «Т» (тасалсан), «Ч» (чөлөөтэй), «Ө» (өвчтэй) тэмдэглэсэн сурагчийн тэр өдрийн бүх оноо автоматаар 0 болно. «Т»-ийн оноо түгжээтэй; «Ч», «Ө»-ийн оноог (тасархай хүрээтэй нүд) нөхөж өгсөн бол засаж болно. Баганын гарчиг дээр дарж засна.</p>`
       : `<div class="card empty">Энэ улиралд үнэлгээ алга. «+ Үнэлгээ нэмэх» дарж сорил, лаборатори, даалгавар үүсгээрэй.</div>`}`;
 }
 function totCell(r){ return r.total==null ? '<span class="hint">—</span>' : `<b>${fmt(r.total,1)}</b> <span class="pill L-${r.L}">${r.L}</span>`; }
@@ -527,10 +531,11 @@ function bindGrades(){
     inp.addEventListener('change', () => {
       const a = S.assessments.find(x => x.id===inp.dataset.a);
       let v = inp.value.trim().replace(',','.');
-      S.scores[a.id] ||= {};
-      if(v===''){ delete S.scores[a.id][inp.dataset.s]; }
-      else if(isNaN(+v) || +v<0){ toast('Тоо оруулна уу'); inp.value=''; delete S.scores[a.id][inp.dataset.s]; }
-      else { S.scores[a.id][inp.dataset.s] = +v; if(+v > a.max) toast(`Дээд оноо ${a.max} — шалгаарай`); }
+      const ST = inp.classList.contains('exc') ? (S.mk ||= {}) : S.scores;
+      ST[a.id] ||= {};
+      if(v===''){ delete ST[a.id][inp.dataset.s]; }
+      else if(isNaN(+v) || +v<0){ toast('Тоо оруулна уу'); inp.value=''; delete ST[a.id][inp.dataset.s]; }
+      else { ST[a.id][inp.dataset.s] = +v; if(+v > a.max) toast(`Дээд оноо ${a.max} — шалгаарай`); }
       inp.classList.toggle('bad', v!=='' && +v > a.max);
       save();
       const c = cls(), s = c.students.find(x => x.id===inp.dataset.s);
@@ -571,7 +576,7 @@ function saveA(id){
   else S.assessments.push({id:uid(), classId:S.ui.classId, ...o});
   save(); closeModal(); render();
 }
-function delA(id){ if(!confirm('Энэ үнэлгээ болон бүх оноог устгах уу?')) return; S.assessments = S.assessments.filter(x => x.id!==id); delete S.scores[id]; save(); closeModal(); render(); }
+function delA(id){ if(!confirm('Энэ үнэлгээ болон бүх оноог устгах уу?')) return; S.assessments = S.assessments.filter(x => x.id!==id); delete S.scores[id]; if(S.mk) delete S.mk[id]; save(); closeModal(); render(); }
 
 /* ================== Нэгтгэл ================== */
 function classSummary(c, t){
@@ -713,6 +718,7 @@ function delS(id){
   if(!confirm(`${s.name}-г ангиас хасах уу? Түүний оноо, ирц мөн устна.`)) return;
   c.students = c.students.filter(x => x.id!==id);
   for(const a in S.scores) delete S.scores[a][id];
+  for(const a in (S.mk||{})) delete S.mk[a][id];
   for(const d in (S.att[c.id]||{})) delete S.att[c.id][d].m[id];
   save(); render();
 }
