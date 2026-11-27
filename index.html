@@ -799,7 +799,70 @@ function closeModal(){ document.getElementById('modal')?.remove(); }
 function noClass(){ return `<div class="card empty">Анги алга. Тохиргоо хэсэгт анги нэмнэ үү.</div>`; }
 function noStudents(c){ return `<h1>${esc(c.name)}</h1><div class="card empty">Энэ ангид сурагч алга.<br><br><button class="btn pri" onclick="go('students')">Сурагчдын нэрс оруулах</button></div>`; }
 
-load(); render();
+/* ================== Сорилтын сайтаас (biologybyamra) дүн оруулах ================== */
+// Сорилтын сайтын «📒 Журналд оруулах» товч энэ хуудсыг #quiz=... хаягтай нээнэ. Өгөгдөл зөвхөн хаягаар дамжина (серверт хадгалагдахгүй).
+function qNorm(s){ return String(s||'').toLowerCase().replace(/ё/g,'е').replace(/[().,\-_'"]/g,' ').replace(/\(\?\)/g,'').replace(/\s+/g,' ').trim(); }
+function qCore(s){ return qNorm(String(s||'').replace(/\(\s*\d+\s*\)|\(\?\)/g,'')).split(' ').filter(w => w.length>1).join(' '); } // овгийн үсэг (Б.) хасна
+function qMatch(c, row){
+  const qc = qCore(row.n), qf = qNorm(row.n), qcls = qNorm(row.c).replace(/\s/g,'');
+  let cand = c.students.filter(s => qCore(s.name)===qc || qNorm(s.name)===qf);
+  if(!cand.length && qc) cand = c.students.filter(s => { const a = qCore(s.name); return a && (a.includes(qc) || qc.includes(a)); });
+  if(cand.length>1 && qcls){ const f = cand.filter(s => qNorm(s.sub).replace(/\s/g,'')===qcls); if(f.length) cand = f; }
+  return cand.length===1 ? cand[0].id : '';
+}
+function qDecode(h){
+  try{ const b = h.replace(/-/g,'+').replace(/_/g,'/'); const bin = atob(b + '==='.slice((b.length+3)%4)); const bytes = Uint8Array.from(bin, ch => ch.charCodeAt(0)); return JSON.parse(new TextDecoder().decode(bytes)); }catch(e){ return null; }
+}
+let QI = null; // одоогийн импорт
+function checkQuizImport(){
+  const m = location.hash.match(/[#&]quiz=([^&]+)/); if(!m) return;
+  const d = qDecode(m[1]); history.replaceState(null, '', location.pathname + location.search);
+  if(!d || !Array.isArray(d.rows)){ toast('Сорилтын дүнг уншиж чадсангүй'); return; }
+  // хамгийн олон нэр таарсан ангийг сонгоно
+  let best = S.classes[0], bn = -1;
+  for(const c of S.classes){ const n = d.rows.filter(r => qMatch(c, r)).length; if(n > bn){ bn = n; best = c; } }
+  QI = { d, classId: best ? best.id : '', map: {} };
+  qFill(); qModal();
+}
+function qFill(){ const c = S.classes.find(x => x.id===QI.classId); QI.map = {}; if(c) QI.d.rows.forEach((r,i) => QI.map[i] = qMatch(c, r)); }
+function qModal(){
+  const d = QI.d, c = S.classes.find(x => x.id===QI.classId);
+  const prev = S.assessments.find(a => a.quizId && a.quizId===d.id && a.classId===QI.classId);
+  const opts = c ? [...c.students].sort(nameSort) : [];
+  const matched = Object.values(QI.map).filter(Boolean).length;
+  const rows = d.rows.map((r,i) => `<tr><td>${esc(r.n)}<span class="subcl">${esc(r.c||'')}</span></td><td class="c"><b>${fmt(r.s + (r.b||0),2)}</b>${r.b?` <span class="hint">(${fmt(r.s,2)} + ${r.b} бонус)</span>`:''}</td>
+    <td><select onchange="QI.map[${i}]=this.value;qModal()" style="${QI.map[i]?'':'border-color:#d9534f'}"><option value="">— оруулахгүй —</option>${opts.map(s => `<option value="${s.id}" ${QI.map[i]===s.id?'selected':''}>${esc(s.name)}${s.sub?' · '+esc(s.sub):''}</option>`).join('')}</select></td></tr>`).join('');
+  modal(`<h2>📒 Сорилтын дүн оруулах</h2>
+    <p class="sub">${esc(d.topic||'Сорилт')} · ${esc(d.date||'')} · ${d.rows.length} сурагч · дээд оноо ${d.max}${prev?' · <b>энэ сорилтыг өмнө нь оруулсан — дахин оруулбал шинэчлэгдэнэ</b>':''}</p>
+    <div class="two">
+      <div class="fld"><label>Анги</label><select id="qC" onchange="QI.classId=this.value;qFill();qModal()">${S.classes.map(k => `<option value="${k.id}" ${k.id===QI.classId?'selected':''}>${esc(k.name)}</option>`).join('')}</select></div>
+      <div class="fld"><label>Төрөл</label><select id="qK">${S.settings.cats.map(k => `<option value="${k.id}" ${k.id===(QI.cat||(S.settings.cats.find(x=>x.id==='sor')?'sor':S.settings.cats[0].id))?'selected':''}>${esc(k.name)}</option>`).join('')}</select></div>
+      <div class="fld"><label>Нэр</label><input type="text" id="qT" value="${esc(QI.title || ('Сорилт: ' + (d.topic||'')))}"></div>
+      <div class="fld"><label>Огноо</label><input type="date" id="qD" value="${esc(QI.date || d.date || today())}"></div>
+      <div class="fld"><label>Улирал</label><select id="qU">${Array.from({length:S.settings.terms},(_,i)=>`<option ${i+1===(QI.term||S.ui.term)?'selected':''}>${i+1}</option>`).join('')}</select></div>
+      <div class="fld"><label>Дээд оноо</label><input type="number" id="qM" min="1" value="${QI.max || d.max || 5}"></div>
+    </div>
+    <p class="hint">${matched}/${d.rows.length} сурагч журналын нэртэй автоматаар таарлаа. Улаан хүрээтэйг гараар сонгоно уу (эсвэл оруулахгүй үлдээнэ).</p>
+    <div class="tw" style="max-height:46vh;overflow:auto"><table><thead><tr><th>Сорилт дээрх нэр</th><th class="c">Оноо</th><th>Журнал дээрх сурагч</th></tr></thead><tbody>${rows}</tbody></table></div>
+    <div class="row" style="justify-content:flex-end;margin-top:12px"><button class="btn ghost" onclick="QI=null;closeModal()">Болих</button><button class="btn pri" onclick="qApply()">Журналд оруулах</button></div>`, true);
+  // оруулсан утгуудыг хадгалах (дахин зурахад алдагдахгүй)
+  ['qK','qT','qD','qU','qM'].forEach(id => { const el = document.getElementById(id); el.addEventListener('change', () => { QI.cat = document.getElementById('qK').value; QI.title = document.getElementById('qT').value; QI.date = document.getElementById('qD').value; QI.term = +document.getElementById('qU').value; QI.max = +document.getElementById('qM').value; }); });
+}
+function qApply(){
+  const d = QI.d, c = S.classes.find(x => x.id===QI.classId); if(!c){ toast('Анги сонгоно уу'); return; }
+  const max = +document.getElementById('qM').value; if(!(max>0)){ toast('Дээд оноо 0-ээс их байх ёстой'); return; }
+  const o = { title: document.getElementById('qT').value.trim() || 'Сорилт', cat: document.getElementById('qK').value, max, date: document.getElementById('qD').value, term: +document.getElementById('qU').value };
+  let a = S.assessments.find(x => x.quizId && x.quizId===d.id && x.classId===c.id);
+  if(a) Object.assign(a, o); else { a = { id: uid(), classId: c.id, quizId: d.id, ...o }; S.assessments.push(a); }
+  S.scores[a.id] ||= {}; let n = 0;
+  d.rows.forEach((r,i) => { const sid = QI.map[i]; if(!sid) return; const v = Math.round((r.s + (r.b||0))*100)/100; const old = S.scores[a.id][sid]; S.scores[a.id][sid] = old==null ? v : Math.max(old, v); n++; });
+  save(); closeModal(); QI = null;
+  S.ui.classId = c.id; S.ui.term = o.term; go('grades');
+  toast(`${n} сурагчийн сорилтын дүн орлоо`);
+}
+window.addEventListener('hashchange', checkQuizImport);
+
+load(); render(); checkQuizImport();
 </script>
 </body>
 </html>
